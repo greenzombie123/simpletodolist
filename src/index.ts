@@ -12,6 +12,7 @@ interface ToDo {
 }
 
 // Used for parameters when creating new tasks or editing a task. ID is added later.
+
 interface NewToDo {
     title: string,
     description?: string,
@@ -19,6 +20,7 @@ interface NewToDo {
     priority: Priority,
     project: string
 }
+
 interface ToDoApp {
     taskManager: TaskManager
     projectManager: ProjectManager
@@ -103,12 +105,38 @@ const taskManager: TaskManager = (() => {
 })()
 
 interface ProjectManager {
-    projects: string[]
+    // projects: string[]
     addProject: (name: string) => void
     deleteProject: (name: string) => void
     isProjectThere: (name: string) => boolean
     getProjectNames: () => string[]
 }
+
+const projectManager: ProjectManager = (() => {
+
+    let projects: string[] = []
+
+    const isProjectThere = (projectName: string) => {
+        return projects.some(project => project === projectName)
+    }
+
+    const addProject = (projectName: string) => {
+        if (isProjectThere(projectName)) projects = [...projects, projectName]
+    }
+
+    const deleteProject = (projectName: string) => {
+        let newProjectList: string[] = []
+        projects.forEach(project => {
+            if (projectName !== project) newProjectList.push(project)
+        })
+
+        projects = [...newProjectList]
+    }
+
+    const getProjectNames = () => projects
+
+    return { addProject, deleteProject, getProjectNames, isProjectThere }
+})()
 
 enum Priority {
     None,
@@ -121,7 +149,7 @@ taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDat
 taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "inbox" })
 taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "inbox" })
 taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "school" })
-console.log(taskManager.getAllTasks())
-console.log(taskSearcher.getTasksByToday(taskManager.tasks))
-const g = taskManager.getAllTasks()
+// console.log(taskManager.getAllTasks())
+// console.log(taskSearcher.getTasksByToday(taskManager.tasks))
+// const g = taskManager.getAllTasks()
 
