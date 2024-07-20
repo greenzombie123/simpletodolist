@@ -1,6 +1,24 @@
 import { v4 as uuidv4 } from 'uuid'
 uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
+
+interface ToDo {
+    title: string,
+    description?: string,
+    dueDate: Date,
+    priority: Priority,
+    project: string,
+    id: string
+}
+
+// Used for parameters when creating new tasks or editing a task. ID is added later.
+interface NewToDo {
+    title: string,
+    description?: string,
+    dueDate: Date,
+    priority: Priority,
+    project: string
+}
 interface ToDoApp {
     taskManager: TaskManager
     projectManager: ProjectManager
@@ -19,11 +37,29 @@ interface ToDoApp {
 }
 
 interface TaskSearcher {
-    getTasksByProject: (projectName: string) => ToDo[]
-    getTasksByToday: () => ToDo[]
-    getTasksByInbox: () => ToDo[]
-    getAllTasks: () => ToDo[]
+    getTasksByProject: (projectName: string, tasks: ToDo[]) => ToDo[]
+    getTasksByToday: (tasks: ToDo[]) => ToDo[]
+    getTasksByInbox: (tasks: ToDo[]) => ToDo[]
 }
+
+const taskSearcher: TaskSearcher = (() => {
+
+    const getTasksByProject = (projectName: string, tasks: ToDo[]) => {
+        return tasks.filter(task => task.project === projectName)
+    }
+
+    const getTasksByToday = (tasks: ToDo[]) => {
+        const today = new Date().toDateString()
+        return tasks.filter(task => task.dueDate.toDateString() === today)
+    }
+
+    const getTasksByInbox = (tasks: ToDo[]) => {
+        return tasks.filter(task => task.project === "inbox")
+    }
+
+    return { getTasksByProject, getTasksByInbox, getTasksByToday }
+})()
+
 
 interface TaskManager {
     tasks: ToDo[]
@@ -80,30 +116,12 @@ enum Priority {
     High
 }
 
-interface ToDo {
-    title: string,
-    description?: string,
-    dueDate: Date,
-    priority: Priority,
-    project: string,
-    id: string
-}
 
-// Used for parameters when creating new tasks or editing a task. ID is added later.
-interface NewToDo {
-    title: string,
-    description?: string,
-    dueDate: Date,
-    priority: Priority,
-    project: string
-}
-
-// taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "inbox" })
-// taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "inbox" })
-// console.log(taskManager.getAllTasks())
-// const g = taskManager.getAllTasks()
-// // taskManager.deleteTask(g[0].id)
-// const newTask:NewToDo = {title:"aaba", dueDate:new Date(), priority:Priority.None, project:"inbox"}
-// taskManager.editTask(g[0].id, newTask)
-// console.log(taskManager.getAllTasks())
+taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "inbox" })
+taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "inbox" })
+taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "inbox" })
+taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "school" })
+console.log(taskManager.getAllTasks())
+console.log(taskSearcher.getTasksByToday(taskManager.tasks))
+const g = taskManager.getAllTasks()
 
