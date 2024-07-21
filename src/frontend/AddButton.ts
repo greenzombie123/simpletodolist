@@ -1,5 +1,9 @@
-// export const AddButton = ()=>{
-//     const addButton = document.querySelector(".addButton")
+import './AddButton.css';
 
-//     addButton?.addEventListener("click", )
-// }
+const AddButton = ()=>{
+    const addButton = document.querySelector(".addButton")
+
+    // addButton?.addEventListener("click", )
+}
+
+export default AddButton

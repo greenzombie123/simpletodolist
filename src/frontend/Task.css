@@ -1,0 +1,31 @@
+.task {
+
+    position: relative;
+    display: grid;
+    grid-template: 30px 30px / 1fr min-content;
+    align-items: center;
+    width: 70%;
+    padding: 4px;
+    border: 1px solid black;
+    border-radius: 10px;
+
+
+    .title {}
+
+    .date {
+        color: gray;
+    }
+
+    .project {
+        border-radius: 20px;
+        background-color: red;
+        padding: 3px;
+    }
+
+    .trashCan {
+        position: absolute;
+        right: -25px;
+        width: 25px;
+        height: 25px;
+    }
+}

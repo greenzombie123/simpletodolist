@@ -1,0 +1,16 @@
+aside{
+    ul{
+        /*TODO Get some font files*/
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li{
+            font-size: 30px;
+        }
+    }
+}

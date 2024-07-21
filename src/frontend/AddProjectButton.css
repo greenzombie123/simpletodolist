@@ -1,0 +1,5 @@
+header{
+    .addProjectButton{
+        background: url('../assets/tab-plus.svg');
+    }
+}

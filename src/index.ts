@@ -199,13 +199,22 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const getProjectNames = () => projectManager.getProjectNames()
 
+    const getTasksByProject = (projectName: string) => {
+        const tasks: ToDo[] = getAllTasks()
+        return taskSearcher.getTasksByProject(projectName, tasks)
+    }
+
     const initialize = () => {
         taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
 
-        EventEmitter.emit("appInitialized", { projects: getProjectNames() })
+        EventEmitter.emit("appInitialized", { 
+            projects: getProjectNames(), 
+            currentProject: "Inbox", 
+            tasks: getTasksByProject("Inbox") 
+        })
 
         renderTasksByInbox()
     }

@@ -1,3 +1,5 @@
+import './SideMenu.css';
+
 export interface ISideMenu {
     rerender: (projects: string[]) => void
 }

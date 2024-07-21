@@ -11,6 +11,11 @@ body {
 header{
     background-color: rgb(107, 107, 255);
     grid-area: header;
+
+    button{
+        height: 50px;
+        width: 50px;
+    }
 }
 
 aside{

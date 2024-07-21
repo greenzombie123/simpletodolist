@@ -1,0 +1,5 @@
+header{
+    .deleteProjectButton{
+        background: url('../assets/tab-remove.svg');
+    }
+}

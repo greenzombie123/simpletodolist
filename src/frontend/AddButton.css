@@ -1,0 +1,5 @@
+header{
+    .addTaskButton{
+        background: url('../assets/plus.svg');
+    }
+}
