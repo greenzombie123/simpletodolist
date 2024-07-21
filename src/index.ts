@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
+import App from './frontend/App';
+import { EventEmitter } from './frontend/eventemitter';
 uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
 
-interface ToDo {
+export interface ToDo {
     title: string,
     description?: string,
     dueDate: Date,
@@ -102,7 +104,7 @@ interface ProjectManager {
 
 const projectManager: ProjectManager = (() => {
 
-    let projects: string[] = []
+    let projects: string[] = ['Inbox', 'Today']
 
     const isProjectThere = (projectName: string) => {
         return projects.some(project => project === projectName)
@@ -127,7 +129,7 @@ const projectManager: ProjectManager = (() => {
 })()
 
 
-interface ToDoApp {
+export interface ToDoApp {
     // taskManager: TaskManager
     // projectManager: ProjectManager
     // taskSearcher: TaskSearcher
@@ -139,7 +141,7 @@ interface ToDoApp {
     deleteProject: (name: string) => void
     showProjectNames: () => void
     addTask: (todo: NewToDo) => void
-    editTask: (id:string, todo: NewToDo) => void
+    editTask: (id: string, todo: NewToDo) => void
     deleteTask: (id: string) => void
     initialize: () => void
 }
@@ -193,11 +195,17 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         taskManager.deleteTask(id)
     }
 
+    const getAllTasks = () => taskManager.getAllTasks()
+
+    const getProjectNames = () => projectManager.getProjectNames()
+
     const initialize = () => {
-        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "inbox" })
-        taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "inbox" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "school" })
+        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
+
+        EventEmitter.emit("appInitialized", { projects: getProjectNames() })
 
         renderTasksByInbox()
     }
@@ -209,7 +217,9 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     }
 })(taskManager, projectManager, taskSearcher)
 
+const app = App(toDoApp)
 
+app.initialize()
 
-toDoApp.initialize()
+// toDoApp.initialize()
 
