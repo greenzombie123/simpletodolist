@@ -1,22 +1,30 @@
 import { ToDo } from '..'
-import Task from './Task'
+import createTaskView from './TaskView'
 import './TaskListView.css'
 
-const TaskListView = (todoList: ToDo[], project: string, callBack: (id: string) => void) => {
+export interface TaskListView{
+    render:(tasks: ToDo[], projectName: string)=>void
+    bindOnTaskClicked:()=>void
+}
+
+const createTaskListView = ():TaskListView => {
     const projectHeading = document.querySelector('.projectHeading')!
     const taskListView = document.querySelector('.taskListView')!
 
-    const renderToDoList = (tasks:ToDo[], projectName:string)=>{
+    const render = (tasks: ToDo[], projectName: string) => {
         projectHeading.textContent = projectName
         taskListView.replaceWith(taskListView.cloneNode(true))
         taskListView.textContent = ""
-        tasks.forEach(task=>{
-            Task(task, callBack)
+        tasks.forEach(task => {
+            createTaskView(task, ()=>console.log(2))
         })
     }
 
-    renderToDoList(todoList, project)
+    let onTaskClicked = null
+    const bindOnTaskClicked = () => { }
+
+    return {bindOnTaskClicked, render}
 }
 
-export default TaskListView
+export default createTaskListView
 

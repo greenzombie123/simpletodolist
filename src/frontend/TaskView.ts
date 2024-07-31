@@ -1,11 +1,11 @@
 import { ToDo } from "..";
-import "./Task.css"
+import "./TaskView.css"
 
 interface ITask {
 
 }
 
-const Task = (toDo: ToDo, callBack: (id: string) => void) => {
+const createTaskView = (toDo: ToDo, callBack: (id: string) => void) => {
     const taskListView = document.querySelector('.taskListView')!
     
     const task = document.createElement('div')!
@@ -35,4 +35,4 @@ const Task = (toDo: ToDo, callBack: (id: string) => void) => {
     taskListView.appendChild(task)
 }
 
-export default Task
+export default createTaskView

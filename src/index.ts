@@ -160,6 +160,8 @@ export interface ToDoApp {
     setCurrentProject: (projectName: string) => void
     setCurrentTasks: (projectName: string) => void
     initialize: () => void
+    bindOnProjectListChanged: (callBack: (projectList: string[]) => void) => void
+    bindOnTaskListChanged: (callback: (taskList: ToDo[], project:string) => void) => void
 }
 
 const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher) => {
@@ -204,8 +206,30 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const getCurrentTasks = () => taskManager.getCurrentTasks()
     const getCurrentProject = () => projectManager.getCurrentProject()
-    const setCurrentProject = (projectName: string) => projectManager.setCurrentProject(projectName)
-    const setCurrentTasks = (projectName: string) => taskManager.setCurrentTasks(projectName)
+    const setCurrentProject = (projectName: string) => {
+        projectManager.setCurrentProject(projectName)
+
+        if (onProjectListChanged !== null) {
+            const projectList = getProjectNames()
+            onProjectListChanged(projectList)
+        }
+    }
+    const setCurrentTasks = (projectName: string) => {
+        taskManager.setCurrentTasks(projectName)
+        
+        if(onTaskListChanged !== null){
+            const taskList = getCurrentTasks()
+            const project = getCurrentProject()
+            onTaskListChanged(taskList, project)
+        }
+    }
+
+    let onProjectListChanged: null | ((projectList: string[]) => void) = null
+    const bindOnProjectListChanged = (callback: (projectList: string[]) => void) => { onProjectListChanged = callback }
+
+    let onTaskListChanged: null | ((taskList: ToDo[], project:string) => void) = null
+    const bindOnTaskListChanged = (callback: (taskList: ToDo[], project:string) => void) => { onTaskListChanged = callback }
+
 
     const initialize = () => {
         taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
@@ -222,7 +246,8 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     return {
         addProject, deleteProject, initialize, getProjectNames, getCurrentProject, getCurrentTasks,
-        editTask, addTask, deleteTask, getTasksByProject, setCurrentProject, setCurrentTasks
+        editTask, addTask, deleteTask, getTasksByProject, setCurrentProject, 
+        setCurrentTasks, bindOnProjectListChanged, bindOnTaskListChanged
     }
 
 })(taskManager, projectManager, taskSearcher)
