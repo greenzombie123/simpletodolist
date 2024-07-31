@@ -56,6 +56,9 @@ const taskSearcher: TaskSearcher = (() => {
 
 interface TaskManager {
     tasks: ToDo[]
+    // currentTasks: ToDo[]
+    setCurrentTasks: (projectName: string) => void
+    getCurrentTasks: () => ToDo[]
     addTask: (todo: NewToDo) => void
     editTask: (id: string, todo: NewToDo) => void
     deleteTask: (id: string) => void
@@ -65,6 +68,13 @@ interface TaskManager {
 const taskManager: TaskManager = (() => {
 
     let tasks: ToDo[] = []
+    let currentTasks: ToDo[] = []
+
+    const getCurrentTasks = () => currentTasks
+
+    const setCurrentTasks = (projectName: string) => {
+        currentTasks = tasks.filter(task => task.project === projectName)
+    }
 
     const addTask = (todo: NewToDo) => {
         const id = uuidv4()
@@ -92,10 +102,13 @@ const taskManager: TaskManager = (() => {
 
     const getAllTasks = () => tasks
 
-    return { tasks, addTask, editTask, deleteTask, getAllTasks }
+    return { tasks, addTask, editTask, deleteTask, getAllTasks, getCurrentTasks, setCurrentTasks }
 })()
 
 interface ProjectManager {
+    // currentProject: string
+    setCurrentProject: (project: string) => void
+    getCurrentProject: () => string
     addProject: (name: string) => void
     deleteProject: (name: string) => void
     isProjectThere: (name: string) => boolean
@@ -105,6 +118,13 @@ interface ProjectManager {
 const projectManager: ProjectManager = (() => {
 
     let projects: string[] = ['Inbox', 'Today']
+    let currentProject: string
+
+    const getCurrentProject = () => currentProject
+
+    const setCurrentProject = (project: string) => {
+        if (isProjectThere(project)) currentProject = project
+    }
 
     const isProjectThere = (projectName: string) => {
         return projects.some(project => project === projectName)
@@ -125,17 +145,20 @@ const projectManager: ProjectManager = (() => {
 
     const getProjectNames = () => projects
 
-    return { addProject, deleteProject, getProjectNames, isProjectThere }
+    return { addProject, deleteProject, getProjectNames, isProjectThere, getCurrentProject, setCurrentProject }
 })()
 
 
 export interface ToDoApp {
     addProject: (name: string) => void
     deleteProject: (name: string) => void
-    showProjectNames: () => void
     addTask: (todo: NewToDo) => void
     editTask: (id: string, todo: NewToDo) => void
     deleteTask: (id: string) => void
+    getCurrentTasks: (projectName: string) => ToDo[]
+    getCurrentProject: () => string
+    setCurrentProject: (projectName: string) => void
+    setCurrentTasks: (projectName: string) => void
     initialize: () => void
 }
 
@@ -144,8 +167,6 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     const taskManager: TaskManager = tm
     const projectManager: ProjectManager = pm
     const taskSearcher: TaskSearcher = ts
-    let currentProject = "inbox"
-    let currentToDoList: ToDo[] = []
 
     const addProject = (name: string) => {
         projectManager.addProject(name)
@@ -181,17 +202,27 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         return taskSearcher.getTasksByProject(projectName, tasks)
     }
 
+    const getCurrentTasks = () => taskManager.getCurrentTasks()
+    const getCurrentProject = () => projectManager.getCurrentProject()
+    const setCurrentProject = (projectName: string) => projectManager.setCurrentProject(projectName)
+    const setCurrentTasks = (projectName: string) => taskManager.setCurrentTasks(projectName)
+
     const initialize = () => {
         taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
 
+        setCurrentProject("Inbox")
+        setCurrentTasks("Inbox")
+
+        console.log(getCurrentProject())
+        console.log(getCurrentTasks())
     }
 
     return {
-        addProject, deleteProject, initialize, getProjectNames,
-        editTask, addTask, showProjectNames, deleteTask, getTasksByProject
+        addProject, deleteProject, initialize, getProjectNames, getCurrentProject, getCurrentTasks,
+        editTask, addTask, deleteTask, getTasksByProject, setCurrentProject, setCurrentTasks
     }
 
 })(taskManager, projectManager, taskSearcher)
