@@ -1,0 +1,95 @@
+dialog {
+    --buttonSize: 30px;
+
+    .addModal {
+        display: grid;
+        grid-template: auto auto auto / auto auto;
+        grid-template-areas:
+            "title title"
+            "descript descript"
+            "date priority"
+        ;
+        row-gap: 10px;
+        width: 500px;
+
+        .titleLabel,
+        .descriptLabel,
+        .dateLabel {
+            display: flex;
+            flex-direction: column;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .titleLabel {
+            grid-area: title;
+
+            #titleInput {
+                padding: 5px;
+                font-size: inherit;
+            }
+        }
+
+        .descriptLabel {
+            grid-area: descript;
+            #descriptTextArea {
+                padding: 5px;
+                font-size: inherit;
+            }
+        }
+
+        .dateContainer {
+            grid-area: date;
+            justify-self: center;
+            
+            .dateLabel {
+                text-align: center;
+                .dateInput {
+                    flex: 10%;
+                    width: min-content;
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .priorityDiv {
+            grid-area: priority;
+            justify-self: center;
+            display: grid;
+            width: 150px;
+            grid-template: 20px 40px / 1fr max-content 1fr;
+            grid-template-areas:
+                "label label label"
+                "leftButton text rightButton";
+            justify-content: center;
+            align-items: center;
+
+            .priorityLabel {
+                font-size: 18px;
+                grid-area: label;
+                text-align: center;
+            }
+
+            .priorityText {
+                grid-area: text;
+            }
+
+            .priorityLeftButton,
+            .priorityRightButton {
+                width: var(--buttonSize);
+                height: var(--buttonSize);
+                justify-self: center;
+            }
+
+            .priorityLeftButton {
+                grid-area: leftButton;
+                background: url(../../assets/arrow-left-bold-outline.svg);
+            }
+
+            .priorityRightButton {
+                grid-area: rightButton;
+                background: url(../../assets/arrow-right-bold-outline.svg);
+            }
+        }
+    }
+}

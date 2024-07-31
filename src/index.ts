@@ -15,7 +15,7 @@ export interface ToDo {
 
 // Used for parameters when creating new tasks or editing a task. ID is added later.
 
-interface NewToDo {
+export interface NewToDo {
     title: string,
     description?: string,
     dueDate: Date,
@@ -23,7 +23,7 @@ interface NewToDo {
     project: string
 }
 
-enum Priority {
+export enum Priority {
     None,
     Low,
     High
@@ -130,13 +130,6 @@ const projectManager: ProjectManager = (() => {
 
 
 export interface ToDoApp {
-    // taskManager: TaskManager
-    // projectManager: ProjectManager
-    // taskSearcher: TaskSearcher
-    // currentProject: string
-    renderTasksByProject: (projectName: string) => void
-    renderTasksByToday: () => void
-    renderTasksByInbox: () => void
     addProject: (name: string) => void
     deleteProject: (name: string) => void
     showProjectNames: () => void
@@ -152,23 +145,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     const projectManager: ProjectManager = pm
     const taskSearcher: TaskSearcher = ts
     let currentProject = "inbox"
-
-    const renderTasksByProject = (projectName: string) => {
-        const tasks: ToDo[] = taskManager.getAllTasks()
-        const projects = taskSearcher.getTasksByProject(projectName, tasks)
-        console.log(...projects)
-    }
-    const renderTasksByToday = () => {
-        const tasks: ToDo[] = taskManager.getAllTasks()
-        const todayTasks = taskSearcher.getTasksByToday(tasks)
-        console.log(...todayTasks)
-    }
-
-    const renderTasksByInbox = () => {
-        const tasks: ToDo[] = taskManager.getAllTasks()
-        const inbox = taskSearcher.getTasksByProject('inbox', tasks)
-        console.log(...inbox)
-    }
+    let currentToDoList: ToDo[] = []
 
     const addProject = (name: string) => {
         projectManager.addProject(name)
@@ -210,20 +187,13 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
 
-        EventEmitter.emit("appInitialized", { 
-            projects: getProjectNames(), 
-            currentProject: "Inbox", 
-            tasks: getTasksByProject("Inbox") 
-        })
-
-        renderTasksByInbox()
     }
 
     return {
-        renderTasksByInbox, renderTasksByToday, renderTasksByProject,
-        addProject, deleteProject, initialize,
-        editTask, addTask, showProjectNames, deleteTask
+        addProject, deleteProject, initialize, getProjectNames,
+        editTask, addTask, showProjectNames, deleteTask, getTasksByProject
     }
+
 })(taskManager, projectManager, taskSearcher)
 
 const app = App(toDoApp)
