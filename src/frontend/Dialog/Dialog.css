@@ -1,13 +1,13 @@
 dialog {
     --buttonSize: 30px;
 
-    .addModal {
+    .modal {
         display: grid;
-        grid-template: auto auto auto / auto auto;
+        grid-template: auto auto auto / auto auto auto;
         grid-template-areas:
-            "title title"
-            "descript descript"
-            "date priority"
+            "title title title"
+            "descript descript descript"
+            "date project priority"
         ;
         row-gap: 10px;
         width: 500px;
@@ -32,6 +32,7 @@ dialog {
 
         .descriptLabel {
             grid-area: descript;
+
             #descriptTextArea {
                 padding: 5px;
                 font-size: inherit;
@@ -41,15 +42,29 @@ dialog {
         .dateContainer {
             grid-area: date;
             justify-self: center;
-            
+
             .dateLabel {
                 text-align: center;
+
                 .dateInput {
                     flex: 10%;
                     width: min-content;
                     margin-top: 10px;
                 }
             }
+        }
+
+        .projectBox {
+
+            .projectLabel {
+                font-size: 20px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+
+                .projectSelect {}
+            }
+
         }
 
         .priorityDiv {

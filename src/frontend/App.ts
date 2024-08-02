@@ -1,5 +1,6 @@
 import { ToDo, ToDoApp } from ".."
 import './App.css';
+import './Dialog/Dialog.css';
 import createAddTaskModal, { AddTaskModalView } from "./Dialog/AddTaskModal";
 import createHeader, { HeaderView } from "./Header/Header";
 import createProjectListView, { ProjectListView } from "./projectListView";
@@ -30,8 +31,10 @@ export default function App(toDoApp: ToDoApp): App {
         model.bindOnProjectListChanged(onProjectListChanged)
         model.bindOnTaskListChanged(onTaskListChanged)
         headerView.bindHeaderButtonHandlers({ handleOpenAddTaskModal, handleDeleteProjectModal: () => { }, handleAddProjectModal: () => { } })
-        
+
         model.initialize()
+
+        addTaskModalView.open()
     }
 
     return { initialize }

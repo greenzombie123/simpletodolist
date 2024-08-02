@@ -1,5 +1,6 @@
 import { NewToDo } from "../.."
 import createPriorityBox from "./PriorityBox"
+import createProjectBox from "./ProjectBox"
 
 export interface AddTaskModalView {
     // dialog: HTMLDialogElement
@@ -20,7 +21,7 @@ const createAddTaskModal = (): AddTaskModalView => {
     let addTaskButton: HTMLButtonElement
     let cancelButton: HTMLButtonElement
 
-    form.className = 'addModal'
+    form.className = 'addModal modal'
 
     const titleLabel = document.createElement('label')!
     titleLabel.className = 'titleLabel'
@@ -57,8 +58,8 @@ const createAddTaskModal = (): AddTaskModalView => {
     const priorityBox = createPriorityBox()
     form.appendChild(priorityBox.priorityDiv)
 
-    const projectBox = createPriorityBox()
-    form.appendChild(projectBox.priorityDiv)
+    const projectBox = createProjectBox()
+    form.appendChild(projectBox.projectBox)
 
     addTaskButton = document.createElement('button')!
     addTaskButton.className = 'addTaskButton'
