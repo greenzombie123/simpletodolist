@@ -1,18 +1,27 @@
 import './Header.css'
 
-interface HeaderButtonHandlers {
-    addTaskButtonHandler: () => void
-    addProjectButtonHandler: () => void
-    deleteProjectButtonHandler: () => void
+export interface HeaderButtonHandlers {
+    handleOpenAddTaskModal: () => void
+    handleAddProjectModal: () => void
+    handleDeleteProjectModal: () => void
 }
 
-const Header = (headerButtonHandlers: HeaderButtonHandlers) => {
+export interface HeaderView {
+    bindHeaderButtonHandlers: (handlers: HeaderButtonHandlers) => void
+}
+
+const createHeader = (): HeaderView => {
     const header = document.querySelector('header')!
     const buttons = Array.from(header.querySelectorAll('button'))
-    const { addTaskButtonHandler, addProjectButtonHandler, deleteProjectButtonHandler } = headerButtonHandlers
-    buttons[0].addEventListener('click', addTaskButtonHandler) 
-    buttons[1].addEventListener('click', addProjectButtonHandler)  
-    buttons[2].addEventListener('click', deleteProjectButtonHandler) 
+
+    const bindHeaderButtonHandlers = (handlers: HeaderButtonHandlers) => {
+        const { handleAddProjectModal, handleDeleteProjectModal, handleOpenAddTaskModal } = handlers
+        buttons[0].addEventListener('click', handleOpenAddTaskModal)
+        buttons[1].addEventListener('click', handleAddProjectModal)
+        buttons[2].addEventListener('click', handleDeleteProjectModal)
+    }
+
+    return { bindHeaderButtonHandlers }
 }
 
-export default Header
+export default createHeader

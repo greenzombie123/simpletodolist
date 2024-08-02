@@ -1,4 +1,4 @@
-import AddTaskModal from "./AddModal";
+import AddTaskModal from "./AddTaskModal";
 import "./Dialog.css";
 
 export interface IDialog {
