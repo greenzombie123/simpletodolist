@@ -231,6 +231,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         }
     }
     const setCurrentTasks = (projectName: string) => {
+        projectManager.setCurrentProject(projectName)
         taskManager.setCurrentTasks(projectName)
 
         if (onTaskListChanged !== null) {
