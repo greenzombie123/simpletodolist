@@ -19,7 +19,7 @@ const createProjectBox = (): ProjectBox => {
     projectLabel.appendChild(projectSelect)
 
     let setProjectNamesOnOpen = (projectNames: string[]) => {
-        while (projectSelect.childElementCount) { projectSelect.removeChild(projectBox.firstChild!) }
+        while (projectSelect.childElementCount) { projectSelect.removeChild(projectSelect.firstChild!) }
         projectNames.forEach(projectName => {
             const option = document.createElement('option')!
             option.value = projectName

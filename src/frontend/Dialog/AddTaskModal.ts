@@ -71,8 +71,8 @@ const createAddTaskModal = (): AddTaskModalView => {
     cancelButton = document.createElement('button')!
     cancelButton.className = 'cancelButton'
     cancelButton.textContent = 'Cancel'
+    cancelButton.type = "button"
     form.appendChild(cancelButton)
-    // cancelButton.addEventListener('click', cancelButtonHandler)
 
     const open = () => {
         if (getProjectNames === null) return
@@ -82,7 +82,22 @@ const createAddTaskModal = (): AddTaskModalView => {
         dialog.showModal()
     }
 
-    const close = () => dialog.close()
+    const close = () => {
+        clearInputs()
+        dialog.close()
+    }
+
+    cancelButton.addEventListener('click', close)
+    dialog.addEventListener('click', (e: Event) => {
+        if (e.target === dialog) close()
+    })
+
+    const clearInputs = () => {
+        titleInput.value = ''
+        descripText.value = ''
+        dateInput.value = ''
+        priorityBox.resetPriority()
+    }
 
     let getProjectNames: null | (() => string[]) = null
 

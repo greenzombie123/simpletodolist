@@ -3,6 +3,7 @@ import { Priority } from "../.."
 interface PriorityBox {
     priorityDiv: HTMLDivElement
     getPriority: () => Priority
+    resetPriority:()=>void
 }
 
 const createPriorityBox = (): PriorityBox => {
@@ -44,10 +45,12 @@ const createPriorityBox = (): PriorityBox => {
         Priority.None : priorityText.textContent === "Low" ?
             Priority.Low : Priority.High
 
+    const resetPriority = () => { priorityText.textContent = "None" }
+
     priorityLeftButton.addEventListener("click", decreasePriority)
     priorityRightButton.addEventListener("click", increasePriority)
 
-    return { priorityDiv, getPriority }
+    return { priorityDiv, getPriority, resetPriority }
 }
 
 export default createPriorityBox
