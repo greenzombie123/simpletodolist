@@ -117,7 +117,7 @@ interface ProjectManager {
 
 const projectManager: ProjectManager = (() => {
 
-    let projects: string[] = ['Inbox', 'Today']
+    let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
     let currentProject: string
 
     const getCurrentProject = () => currentProject
@@ -186,7 +186,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const addTask = (todo: NewToDo) => {
         taskManager.addTask(todo)
-        
+
         setCurrentTasks(projectManager.getCurrentProject())
 
     }
@@ -240,6 +240,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "Ice" })
 
         setCurrentProject("Inbox")
         setCurrentTasks("Inbox")

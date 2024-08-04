@@ -3,12 +3,7 @@ import createPriorityBox from "./PriorityBox"
 import createProjectBox from "./ProjectBox"
 
 export interface AddTaskModalView {
-    // dialog: HTMLDialogElement
-    // modal: HTMLFormElement
-    // addTaskButton: HTMLButtonElement
-    // cancelButton: HTMLButtonElement
     open: () => void
-    // getInput: () => NewToDo
     close: () => void
     bindGetProjectNames: (callBack: () => string[]) => void
     bindAddTask: (handler: (todo: NewToDo) => void) => void
@@ -66,7 +61,6 @@ const createAddTaskModal = (): AddTaskModalView => {
     addTaskButton.textContent = 'Add'
     addTaskButton.type = "button"
     form.appendChild(addTaskButton)
-    // addTaskButton.addEventListener('click', addTaskButtonHandler)
 
     cancelButton = document.createElement('button')!
     cancelButton.className = 'cancelButton'
