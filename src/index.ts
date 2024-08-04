@@ -186,6 +186,9 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const addTask = (todo: NewToDo) => {
         taskManager.addTask(todo)
+        
+        setCurrentTasks(projectManager.getCurrentProject())
+
     }
 
     const editTask = (id: string, todo: NewToDo) => {

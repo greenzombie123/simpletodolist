@@ -11,8 +11,7 @@ export interface AddTaskModalView {
     // getInput: () => NewToDo
     close: () => void
     bindGetProjectNames: (callBack: () => string[]) => void
-    // bindOnAddTaskButtonClick: () => void
-    // OnAddTaskButtonClick: () => void
+    bindAddTask: (handler: (todo: NewToDo) => void) => void
 }
 
 const createAddTaskModal = (): AddTaskModalView => {
@@ -64,10 +63,15 @@ const createAddTaskModal = (): AddTaskModalView => {
 
     addTaskButton = document.createElement('button')!
     addTaskButton.className = 'addTaskButton'
+    addTaskButton.textContent = 'Add'
+    addTaskButton.type = "button"
+    form.appendChild(addTaskButton)
     // addTaskButton.addEventListener('click', addTaskButtonHandler)
 
     cancelButton = document.createElement('button')!
     cancelButton.className = 'cancelButton'
+    cancelButton.textContent = 'Cancel'
+    form.appendChild(cancelButton)
     // cancelButton.addEventListener('click', cancelButtonHandler)
 
     const open = () => {
@@ -83,20 +87,27 @@ const createAddTaskModal = (): AddTaskModalView => {
     let getProjectNames: null | (() => string[]) = null
 
     const bindGetProjectNames = (callBack: () => string[]) => getProjectNames = callBack
+    const bindAddTask = (handler: (todo: NewToDo) => void) => {
+        addTaskButton.addEventListener('click', () => {
+            const newToDo = getInput()
+            handler(newToDo)
+            close()
+        })
+    }
 
 
-    // const getInput = (): NewToDo => {
-    //     const title = titleInput.value
-    //     const description = descripText.value
-    //     const dueDate = new Date(dateInput.value)
-    //     const project = projectBox
-    //     const priority = priorityBox.priorityText.textContent === "None" ? 0 : priorityBox.priorityText.textContent === "Low" ? 1 : 2
-    //     if (!description) return { title, dueDate, project, priority }
+    const getInput = (): NewToDo => {
+        const title = titleInput.value
+        const description = descripText.value
+        const dueDate = new Date(dateInput.value)
+        const project = projectBox.getSelectedProjectName()
+        const priority = priorityBox.getPriority()
+        if (!description) return { title, dueDate, project, priority }
 
-    //     return { title, description, }
-    // }
+        return { title, description, dueDate, project, priority }
+    }
 
-    return { open, close, bindGetProjectNames }
+    return { open, close, bindGetProjectNames, bindAddTask }
 }
 
 export default createAddTaskModal

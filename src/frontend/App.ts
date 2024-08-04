@@ -1,4 +1,4 @@
-import { ToDo, ToDoApp } from ".."
+import { NewToDo, ToDo, ToDoApp } from ".."
 import './App.css';
 import './Dialog/Dialog.css';
 import createAddTaskModal, { AddTaskModalView } from "./Dialog/AddTaskModal";
@@ -24,6 +24,7 @@ export default function App(toDoApp: ToDoApp): App {
     const onTaskListChanged = (taskList: ToDo[], project: string) => taskListView.render(taskList, project)
     const handleOpenAddTaskModal = () => addTaskModalView.open()
     const handleGetProjectNamesOnModalOpen = ()=> model.getProjectNames()
+    const handleAddTask = (newToDo:NewToDo) => model.addTask(newToDo)
 
 
     const initialize = () => {
@@ -32,10 +33,11 @@ export default function App(toDoApp: ToDoApp): App {
         model.bindOnTaskListChanged(onTaskListChanged)
         headerView.bindHeaderButtonHandlers({ handleOpenAddTaskModal, handleDeleteProjectModal: () => { }, handleAddProjectModal: () => { } })
         addTaskModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
+        addTaskModalView.bindAddTask(handleAddTask)
 
         model.initialize()
 
-        addTaskModalView.open()
+        // addTaskModalView.open()
     }
 
     return { initialize }
