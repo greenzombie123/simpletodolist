@@ -1,5 +1,5 @@
 export interface ProjectBox {
-    bindOnModalOpened: (callBack: () => string[]) => void
+    setProjectNamesOnOpen: (projectNames: string[]) => void
     projectBox: HTMLDivElement
 }
 
@@ -17,20 +17,19 @@ const createProjectBox = (): ProjectBox => {
     projectSelect.id = 'projectSelect'
     projectLabel.appendChild(projectSelect)
 
-    let onModalOpened: null | ((callBack: () => string[]) => void) = null
-    const bindOnModalOpened = (callBack: () => string[]) => {
-        onModalOpened = () => {
-            const projectNames = callBack()
-            projectNames.forEach(projectName => {
-                const option = document.createElement('option')!
-                option.value = projectName
-                projectSelect.appendChild(option)
-            })
-        }
+    let setProjectNamesOnOpen = (projectNames: string[]) => {
+        while (projectSelect.childElementCount) { projectSelect.removeChild(projectBox.firstChild!) }
+        projectNames.forEach(projectName => {
+            const option = document.createElement('option')!
+            option.value = projectName
+            option.textContent = projectName
+            projectSelect.appendChild(option)
+        })
     }
 
-
-    return { bindOnModalOpened, projectBox }
+    return { projectBox, setProjectNamesOnOpen }
 }
+
+
 
 export default createProjectBox

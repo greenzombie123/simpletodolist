@@ -160,8 +160,9 @@ export interface ToDoApp {
     setCurrentProject: (projectName: string) => void
     setCurrentTasks: (projectName: string) => void
     initialize: () => void
+    getProjectNames: () => string[]
     bindOnProjectListChanged: (callBack: (projectList: string[]) => void) => void
-    bindOnTaskListChanged: (callback: (taskList: ToDo[], project:string) => void) => void
+    bindOnTaskListChanged: (callback: (taskList: ToDo[], project: string) => void) => void
 }
 
 const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher) => {
@@ -216,8 +217,8 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     }
     const setCurrentTasks = (projectName: string) => {
         taskManager.setCurrentTasks(projectName)
-        
-        if(onTaskListChanged !== null){
+
+        if (onTaskListChanged !== null) {
             const taskList = getCurrentTasks()
             const project = getCurrentProject()
             onTaskListChanged(taskList, project)
@@ -227,8 +228,8 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     let onProjectListChanged: null | ((projectList: string[]) => void) = null
     const bindOnProjectListChanged = (callback: (projectList: string[]) => void) => { onProjectListChanged = callback }
 
-    let onTaskListChanged: null | ((taskList: ToDo[], project:string) => void) = null
-    const bindOnTaskListChanged = (callback: (taskList: ToDo[], project:string) => void) => { onTaskListChanged = callback }
+    let onTaskListChanged: null | ((taskList: ToDo[], project: string) => void) = null
+    const bindOnTaskListChanged = (callback: (taskList: ToDo[], project: string) => void) => { onTaskListChanged = callback }
 
 
     const initialize = () => {
@@ -246,7 +247,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     return {
         addProject, deleteProject, initialize, getProjectNames, getCurrentProject, getCurrentTasks,
-        editTask, addTask, deleteTask, getTasksByProject, setCurrentProject, 
+        editTask, addTask, deleteTask, getTasksByProject, setCurrentProject,
         setCurrentTasks, bindOnProjectListChanged, bindOnTaskListChanged
     }
 

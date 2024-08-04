@@ -9,7 +9,8 @@ export interface AddTaskModalView {
     // cancelButton: HTMLButtonElement
     open: () => void
     // getInput: () => NewToDo
-    close:()=>void
+    close: () => void
+    bindGetProjectNames: (callBack: () => string[]) => void
     // bindOnAddTaskButtonClick: () => void
     // OnAddTaskButtonClick: () => void
 }
@@ -70,11 +71,19 @@ const createAddTaskModal = (): AddTaskModalView => {
     // cancelButton.addEventListener('click', cancelButtonHandler)
 
     const open = () => {
+        if (getProjectNames === null) return
+        const projectNames: string[] = getProjectNames()
         dialog.replaceChildren(form)
+        projectBox.setProjectNamesOnOpen(projectNames)
         dialog.showModal()
     }
 
     const close = () => dialog.close()
+
+    let getProjectNames: null | (() => string[]) = null
+
+    const bindGetProjectNames = (callBack: () => string[]) => getProjectNames = callBack
+
 
     // const getInput = (): NewToDo => {
     //     const title = titleInput.value
@@ -87,7 +96,7 @@ const createAddTaskModal = (): AddTaskModalView => {
     //     return { title, description, }
     // }
 
-    return {open, close}
+    return { open, close, bindGetProjectNames }
 }
 
 export default createAddTaskModal

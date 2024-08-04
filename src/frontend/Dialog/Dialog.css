@@ -62,7 +62,9 @@ dialog {
                 display: flex;
                 flex-direction: column;
 
-                .projectSelect {}
+                .projectSelect {
+                    color: black;
+                }
             }
 
         }

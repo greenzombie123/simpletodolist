@@ -22,15 +22,16 @@ export default function App(toDoApp: ToDoApp): App {
 
     const onProjectListChanged = (projectList: string[]) => projectListView.render(projectList)
     const onTaskListChanged = (taskList: ToDo[], project: string) => taskListView.render(taskList, project)
-    const handleOpenAddTaskModal = () => {
-        addTaskModalView.open()
-    }
+    const handleOpenAddTaskModal = () => addTaskModalView.open()
+    const handleGetProjectNamesOnModalOpen = ()=> model.getProjectNames()
+
 
     const initialize = () => {
 
         model.bindOnProjectListChanged(onProjectListChanged)
         model.bindOnTaskListChanged(onTaskListChanged)
         headerView.bindHeaderButtonHandlers({ handleOpenAddTaskModal, handleDeleteProjectModal: () => { }, handleAddProjectModal: () => { } })
+        addTaskModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
 
         model.initialize()
 
