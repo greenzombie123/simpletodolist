@@ -4,6 +4,7 @@ interface PriorityBox {
     priorityDiv: HTMLDivElement
     getPriority: () => Priority
     resetPriority:()=>void
+    setPriority:(priority:Priority)=>void
 }
 
 const createPriorityBox = (): PriorityBox => {
@@ -47,10 +48,16 @@ const createPriorityBox = (): PriorityBox => {
 
     const resetPriority = () => { priorityText.textContent = "None" }
 
+    const setPriority = (priority:Priority)=> {
+        priority === Priority.None ? priorityText.textContent = "None" : 
+        priority === Priority.Low ? priorityText.textContent = "Low" :
+        priorityText.textContent = "High"
+    }
+
     priorityLeftButton.addEventListener("click", decreasePriority)
     priorityRightButton.addEventListener("click", increasePriority)
 
-    return { priorityDiv, getPriority, resetPriority }
+    return { priorityDiv, getPriority, resetPriority, setPriority }
 }
 
 export default createPriorityBox

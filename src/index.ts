@@ -189,7 +189,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const showProjectNames = () => {
         const projects = projectManager.getProjectNames()
-        console.log(projects)
+        // console.log(projects)
     }
 
     const addTask = (todo: NewToDo) => {
@@ -201,10 +201,14 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const editTask = (id: string, todo: NewToDo) => {
         taskManager.editTask(id, todo)
+
+        setCurrentTasks(projectManager.getCurrentProject())
     }
 
     const deleteTask = (id: string) => {
         taskManager.deleteTask(id)
+
+        setCurrentTasks(projectManager.getCurrentProject())
     }
 
     const getAllTasks = () => taskManager.getAllTasks()
@@ -246,15 +250,15 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     const initialize = () => {
         taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("December 17, 2024 03:24:00"), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "School" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("July 30, 2024 03:24:00"), priority: Priority.Low, project: "Ice" })
+        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("2025-12-11"), priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("2024-02-27"), priority: Priority.High, project: "School" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("2024-05-02"), priority: Priority.Low, project: "Ice" })
 
         setCurrentProject("Inbox")
         setCurrentTasks("Inbox")
 
-        console.log(getCurrentProject())
-        console.log(getCurrentTasks())
+        // console.log(getCurrentProject())
+        // console.log(getCurrentTasks())
     }
 
     return {

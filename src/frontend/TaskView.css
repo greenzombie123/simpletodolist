@@ -8,6 +8,7 @@
     padding: 4px;
     border: 1px solid black;
     border-radius: 10px;
+    cursor: pointer;
 
 
     .title {}
@@ -23,8 +24,11 @@
     }
 
     .trashCan {
+        background-image: url(../assets/trashcan.svg);
         position: absolute;
         right: -25px;
+        top: 0;
+        cursor: pointer;
         width: 25px;
         height: 25px;
     }

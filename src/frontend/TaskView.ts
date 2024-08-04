@@ -5,12 +5,14 @@ interface ITask {
 
 }
 
-const createTaskView = (toDo: ToDo, callBack: (id: string) => void) => {
+const createTaskView = (toDo: ToDo, callBack: (todo: ToDo) => void, handleDeleteTask: (id: string) => void) => {
     const taskListView = document.querySelector('.taskListView')!
-    
+
     const task = document.createElement('div')!
     task.className = 'task'
-    task.addEventListener('click',()=>{callBack(toDo.id)})
+    task.addEventListener('click', (e:Event) => {
+        if (e.target === task) callBack(toDo)
+    })
 
     const title = document.createElement('p')!
     title.className = 'title'
@@ -25,6 +27,9 @@ const createTaskView = (toDo: ToDo, callBack: (id: string) => void) => {
     date.textContent = toDo.dueDate.toDateString()
 
     const trashCan = document.createElement('div')!
+    trashCan.addEventListener('click', (e: Event) => {
+        if (e.target === trashCan) handleDeleteTask(toDo.id)
+    })
     trashCan.className = 'trashCan'
 
     task.appendChild(title)
