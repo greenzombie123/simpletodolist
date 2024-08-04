@@ -73,7 +73,8 @@ const taskManager: TaskManager = (() => {
     const getCurrentTasks = () => currentTasks
 
     const setCurrentTasks = (projectName: string) => {
-        currentTasks = tasks.filter(task => task.project === projectName)
+        if(isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
+        else currentTasks = tasks.filter(task => task.project === projectName)
     }
 
     const addTask = (todo: NewToDo) => {
@@ -100,13 +101,20 @@ const taskManager: TaskManager = (() => {
         tasks = [...newTasks]
     }
 
+    const setCurrentTasksByToday = () => {
+        currentTasks = tasks.filter(task =>
+            task.dueDate.toDateString() === new Date().toDateString()
+        )
+    }
+
+    const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
+
     const getAllTasks = () => tasks
 
     return { tasks, addTask, editTask, deleteTask, getAllTasks, getCurrentTasks, setCurrentTasks }
 })()
 
 interface ProjectManager {
-    // currentProject: string
     setCurrentProject: (project: string) => void
     getCurrentProject: () => string
     addProject: (name: string) => void
