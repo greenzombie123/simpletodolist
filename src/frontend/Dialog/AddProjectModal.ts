@@ -65,6 +65,7 @@ const createAddProjectModal = (): AddProjectModalView => {
 
     const clearInputs = () => {
         currentProjects = []
+        projectNameInput.value = ''
     }
 
     const doesProjectNameExist = (userInput: string) => {

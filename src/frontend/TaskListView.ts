@@ -13,11 +13,9 @@ const createTaskListView = (): TaskListView => {
     const taskListView = document.querySelector('.taskListView')!
 
     const render = (tasks: ToDo[], projectName: string) => {
-        console.log(tasks)
         projectHeading.textContent = projectName
         while (taskListView.firstChild) { taskListView.removeChild(taskListView.firstChild!) }
         tasks.forEach(task => {
-            console.log(openEditTask)
             createTaskView(
                 task,
                 () => { if (openEditTask) openEditTask(task) },
