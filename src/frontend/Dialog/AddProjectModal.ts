@@ -1,0 +1,106 @@
+
+export interface AddProjectModalView {
+    open: () => void
+    bindGetProjectNames: (handler: () => string[]) => void
+    bindAddProject: (handler: (project: string) => void) => void
+}
+
+const createAddProjectModal = (): AddProjectModalView => {
+
+    let currentProjects: string[] = []
+
+    const dialog = document.querySelector("dialog")!
+    const form = document.createElement('form')!
+    let addProjectButton: HTMLButtonElement
+    let cancelButton: HTMLButtonElement
+
+    form.className = 'addProjectModal modal'
+
+    const titleLabel = document.createElement('label')!
+    titleLabel.className = 'projectNameLabel'
+    titleLabel.textContent = "Type name of new project"
+    titleLabel.htmlFor = "projectNameInput"
+    form.appendChild(titleLabel)
+
+    const inputWrapper = document.createElement('div')!
+    inputWrapper.className = 'projectNameInputWrapper'
+    form.appendChild(inputWrapper)
+
+    const projectNameInput = document.createElement('input')!
+    projectNameInput.id = 'projectNameInput'
+    inputWrapper.appendChild(projectNameInput)
+
+    const warningText = document.createElement('p')!
+    warningText.className = 'warningText'
+    inputWrapper.appendChild(warningText)
+
+    addProjectButton = document.createElement('button')!
+    addProjectButton.className = 'addProjectButton'
+    addProjectButton.textContent = 'Add'
+    addProjectButton.type = "button"
+    form.appendChild(addProjectButton)
+
+    cancelButton = document.createElement('button')!
+    cancelButton.className = 'cancelButton'
+    cancelButton.textContent = 'Cancel'
+    cancelButton.type = "button"
+    form.appendChild(cancelButton)
+
+    const open = () => {
+        if (getProjectNames === null) return
+        currentProjects = getProjectNames()
+        dialog.replaceChildren(form)
+        dialog.showModal()
+    }
+
+    const close = () => {
+        clearInputs()
+        dialog.close()
+    }
+
+    cancelButton.addEventListener('click', close)
+    dialog.addEventListener('click', (e: Event) => {
+        if (e.target === dialog) close()
+    })
+
+    const clearInputs = () => {
+        currentProjects = []
+    }
+
+    const doesProjectNameExist = (userInput: string) => {
+        if (getProjectNames === null) return
+        return getProjectNames().some(projectName => projectName.toLowerCase() === userInput.toLowerCase())
+    }
+
+    const showError = () => {
+        warningText.style.display = "block"
+        warningText.textContent = "Project name already exist!"
+        setTimeout(() => {
+            warningText.style.display = "none"
+        }, 2000)
+    }
+
+    let getProjectNames: null | (() => string[]) = null
+
+    const bindGetProjectNames = (callBack: () => string[]) => getProjectNames = callBack
+
+    const bindAddProject = (handler: (project: string) => void) => {
+        addProjectButton.addEventListener('click', () => {
+            const projectName = getInput()
+            if (doesProjectNameExist(projectName)) {
+                showError()
+                return
+            }
+            handler(projectName)
+            close()
+        })
+    }
+
+
+    const getInput = (): string => projectNameInput.value
+
+
+    return { open, bindGetProjectNames, bindAddProject }
+}
+
+export default createAddProjectModal

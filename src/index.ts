@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
 import App from './frontend/App';
-import { EventEmitter } from './frontend/eventemitter';
 uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
 
@@ -138,8 +137,12 @@ const projectManager: ProjectManager = (() => {
         return projects.some(project => project === projectName)
     }
 
+    const isProjectNameUnique = (projectName: string) => {
+        return projects.some(project => project !== projectName)
+    }
+
     const addProject = (projectName: string) => {
-        if (isProjectThere(projectName)) projects = [...projects, projectName]
+        if (isProjectNameUnique(projectName)) projects = [...projects, projectName]
     }
 
     const deleteProject = (projectName: string) => {
@@ -181,6 +184,11 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     const addProject = (name: string) => {
         projectManager.addProject(name)
+
+        if (onProjectListChanged !== null) {
+            const projectList = getProjectNames()
+            onProjectListChanged(projectList)
+        }
     }
 
     const deleteProject = (name: string) => {

@@ -1,5 +1,6 @@
 dialog {
     --buttonSize: 30px;
+    --modalWidth: 500px;
 
     .modal {
         display: grid;
@@ -10,7 +11,7 @@ dialog {
             "date project priority"
         ;
         row-gap: 10px;
-        width: 500px;
+        width: var(--modalWidth);
 
         .titleLabel,
         .descriptLabel,
@@ -109,4 +110,59 @@ dialog {
             }
         }
     }
+
+    .addProjectModal {
+        display: grid;
+        grid-template: 1fr 2fr 1fr / repeat(2, 1fr);
+        grid-template-areas:
+            "label label"
+            "input input"
+            "leftButton rightButton"
+        ;
+        width: var(--modalWidth);
+        font-size: 20px;
+
+        .projectNameLabel {
+            grid-area: label;
+            text-align: center;
+        }
+
+        .projectNameInputWrapper {
+            grid-area: input;
+
+            position: relative;
+
+            #projectNameInput {
+                padding: 2px;
+                width: 100%;
+                font-size: inherit;
+            }
+
+            .warningText {
+                display: none;
+                position: absolute;
+                text-align: center;
+                width: 100%;
+                color: red;
+                font-weight: 700;
+            }
+        }
+
+        button {
+            padding: 5px;
+            width: min-content;
+            font-size: inherit;
+            justify-self: center;
+
+            &.cancelButton {
+                grid-area: rightButton;
+            }
+
+            &.addProjectButton {
+                grid-area: leftButton;
+            }
+        }
+    }
+
+
 }

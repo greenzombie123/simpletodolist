@@ -17,6 +17,7 @@ const createTaskListView = (): TaskListView => {
         projectHeading.textContent = projectName
         while (taskListView.firstChild) { taskListView.removeChild(taskListView.firstChild!) }
         tasks.forEach(task => {
+            console.log(openEditTask)
             createTaskView(
                 task,
                 () => { if (openEditTask) openEditTask(task) },
