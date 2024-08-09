@@ -14,7 +14,7 @@ const createAddProjectModal = (): AddProjectModalView => {
     let addProjectButton: HTMLButtonElement
     let cancelButton: HTMLButtonElement
 
-    form.className = 'addProjectModal modal'
+    form.className = 'projectModal modal'
 
     const titleLabel = document.createElement('label')!
     titleLabel.className = 'projectNameLabel'

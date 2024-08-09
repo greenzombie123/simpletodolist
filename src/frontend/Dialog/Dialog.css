@@ -111,7 +111,7 @@ dialog {
         }
     }
 
-    .addProjectModal {
+    .projectModal {
         display: grid;
         grid-template: 1fr 2fr 1fr / repeat(2, 1fr);
         grid-template-areas:

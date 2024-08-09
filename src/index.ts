@@ -62,6 +62,7 @@ interface TaskManager {
     editTask: (id: string, todo: NewToDo) => void
     deleteTask: (id: string) => void
     getAllTasks: () => ToDo[]
+    updateTasksForDeletedProject: (projectName: string) => void
 }
 
 const taskManager: TaskManager = (() => {
@@ -72,7 +73,7 @@ const taskManager: TaskManager = (() => {
     const getCurrentTasks = () => currentTasks
 
     const setCurrentTasks = (projectName: string) => {
-        if(isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
+        if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
         else currentTasks = tasks.filter(task => task.project === projectName)
     }
 
@@ -106,11 +107,18 @@ const taskManager: TaskManager = (() => {
         )
     }
 
+    const updateTasksForDeletedProject = (projectName: string) => {
+        tasks = tasks.map(task => {
+            if (task.project === projectName) return { ...task, project: "Inbox" }
+            else return task
+        })
+    }
+
     const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
 
     const getAllTasks = () => tasks
 
-    return { tasks, addTask, editTask, deleteTask, getAllTasks, getCurrentTasks, setCurrentTasks }
+    return { tasks, addTask, editTask, deleteTask, getAllTasks, getCurrentTasks, setCurrentTasks, updateTasksForDeletedProject }
 })()
 
 interface ProjectManager {
@@ -146,6 +154,7 @@ const projectManager: ProjectManager = (() => {
     }
 
     const deleteProject = (projectName: string) => {
+        if (projectName === "Inbox" || projectName === "Today") return
         let newProjectList: string[] = []
         projects.forEach(project => {
             if (projectName !== project) newProjectList.push(project)
@@ -166,6 +175,7 @@ export interface ToDoApp {
     addTask: (todo: NewToDo) => void
     editTask: (id: string, todo: NewToDo) => void
     deleteTask: (id: string) => void
+    updateTasksForDeletedProject: (projectName: string) => void
     getCurrentTasks: (projectName: string) => ToDo[]
     getCurrentProject: () => string
     setCurrentProject: (projectName: string) => void
@@ -174,6 +184,7 @@ export interface ToDoApp {
     getProjectNames: () => string[]
     bindOnProjectListChanged: (callBack: (projectList: string[]) => void) => void
     bindOnTaskListChanged: (callback: (taskList: ToDo[], project: string) => void) => void
+    moveToPreviousProject: (currentProject: string) => void
 }
 
 const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher) => {
@@ -228,6 +239,24 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         return taskSearcher.getTasksByProject(projectName, tasks)
     }
 
+    const updateTasksForDeletedProject = (projectName: string) => {
+        taskManager.updateTasksForDeletedProject(projectName)
+        if (onTaskListChanged) onTaskListChanged(getCurrentTasks(), getCurrentProject())
+        if (onProjectListChanged) onProjectListChanged(getProjectNames())
+    }
+
+    const moveToPreviousProject = (currentProject: string) => {
+        //TODO change naming of this function
+        if (!isCurrentProjectBeingDeleted(currentProject)) return
+        const projects = getProjectNames()
+        const index = projects.findIndex(project => project === currentProject)
+        const previousProject = projects[index - 1]
+        if (previousProject === "Today") setCurrentProject("Today")
+        else setCurrentProject(previousProject)
+    }
+
+    const isCurrentProjectBeingDeleted = (currentProject: string) => currentProject === getCurrentProject()
+
     const getCurrentTasks = () => taskManager.getCurrentTasks()
     const getCurrentProject = () => projectManager.getCurrentProject()
     const setCurrentProject = (projectName: string) => {
@@ -273,7 +302,8 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
     return {
         addProject, deleteProject, initialize, getProjectNames, getCurrentProject, getCurrentTasks,
         editTask, addTask, deleteTask, getTasksByProject, setCurrentProject,
-        setCurrentTasks, bindOnProjectListChanged, bindOnTaskListChanged
+        setCurrentTasks, bindOnProjectListChanged, bindOnTaskListChanged, updateTasksForDeletedProject,
+        moveToPreviousProject
     }
 
 })(taskManager, projectManager, taskSearcher)

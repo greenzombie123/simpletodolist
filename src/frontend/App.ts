@@ -7,6 +7,7 @@ import createProjectListView, { ProjectListView } from "./projectListView";
 import createTaskListView, { TaskListView } from "./TaskListView";
 import createEditTaskModal, { EditTaskModalView } from "./Dialog/EditTaskModal";
 import createAddProjectModal, { AddProjectModalView } from "./Dialog/AddProjectModal";
+import createDeleteProjectModal, { DeleteProjectModalView } from "./Dialog/DeleteProjectModal";
 
 
 
@@ -23,6 +24,7 @@ export default function App(toDoApp: ToDoApp): App {
     const addTaskModalView: AddTaskModalView = createAddTaskModal()
     const addProjectModalView: AddProjectModalView = createAddProjectModal()
     const editTaskModalView: EditTaskModalView = createEditTaskModal()
+    const deleteProjectModalView: DeleteProjectModalView = createDeleteProjectModal()
 
 
     const onProjectListChanged = (projectList: string[]) => projectListView.render(projectList)
@@ -40,6 +42,12 @@ export default function App(toDoApp: ToDoApp): App {
     }
     const handleDeleteTask = (id: string) => model.deleteTask(id)
     const handleAddProject = (projectName: string) => model.addProject(projectName)
+    const handleDeleteProject = (projectName: string) => { 
+        model.moveToPreviousProject(projectName)
+        model.deleteProject(projectName) 
+        model.updateTasksForDeletedProject(projectName)
+    }
+    const handleOpenDeleteProjectModal = () => deleteProjectModalView.open()
 
 
 
@@ -47,12 +55,14 @@ export default function App(toDoApp: ToDoApp): App {
 
         model.bindOnProjectListChanged(onProjectListChanged)
         model.bindOnTaskListChanged(onTaskListChanged)
-        headerView.bindHeaderButtonHandlers({ handleOpenAddTaskModal, handleOpenDeleteProjectModal: () => { }, handleOpenAddProjectModal })
+        headerView.bindHeaderButtonHandlers({ handleOpenAddTaskModal, handleOpenDeleteProjectModal, handleOpenAddProjectModal })
         addTaskModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
         editTaskModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
         addTaskModalView.bindAddTask(handleAddTask)
         addProjectModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
         addProjectModalView.bindAddProject(handleAddProject)
+        deleteProjectModalView.bindGetProjectNames(handleGetProjectNamesOnModalOpen)
+        deleteProjectModalView.bindDeleteProject(handleDeleteProject)
         projectListView.bindChangeCurrentTasks(handleChangeCurrentTasks)
         taskListView.bindOpenEditTask(handleOpenEditTaskModal)
         taskListView.bindDeleteTask(handleDeleteTask)
