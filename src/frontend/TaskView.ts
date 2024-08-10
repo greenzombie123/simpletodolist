@@ -27,7 +27,10 @@ const createTaskView = (toDo: ToDo, callBack: (todo: ToDo) => void, handleDelete
 
     const trashCan = document.createElement('div')!
     trashCan.addEventListener('click', (e: Event) => {
-        if (e.target === trashCan) handleDeleteTask(toDo.id)
+        if (e.target === trashCan) {
+            e.stopPropagation()
+            handleDeleteTask(toDo.id)
+        }
     })
     trashCan.className = 'trashCan'
 

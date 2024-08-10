@@ -80,10 +80,10 @@ const createEditTaskModal = (): EditTaskModalView => {
 
     const close = () => {
         clearInputs()
-        dialogManager.closeDialog() 
+        dialogManager.closeDialog()
     }
 
-    cancelButton.addEventListener('click', close) 
+    cancelButton.addEventListener('click', close)
 
     const clearInputs = () => {
         titleInput.value = ''
@@ -96,14 +96,19 @@ const createEditTaskModal = (): EditTaskModalView => {
 
     const bindGetProjectNames = (callBack: () => string[]) => getProjectNames = callBack
 
+    let editTask: null | (() => void) = null
+
     const bindEditTask = (handler: (id: string, todo: NewToDo) => void, id: string) => {
 
-        editTaskButton.addEventListener('click', () => {
+        if (editTask) editTaskButton.removeEventListener('click', editTask)
+
+        editTask = () => {
             const newToDo = getInput()
-            console.log(newToDo)
             handler(id, newToDo)
             close()
-        }, { once: true })
+        }
+
+        editTaskButton.addEventListener('click', editTask)
     }
 
     const setInput = (todo: ToDo) => {
