@@ -19,12 +19,16 @@ header{
 }
 
 aside{
-    background-color: red;
     grid-area: aside;
+    border-right: 1px solid black;
     padding: 5px;
 }
 
 main{
-    background-color: yellow;
     grid-area: main;
+}
+
+footer svg{
+    fill:gold;
+    width: 10px;
 }

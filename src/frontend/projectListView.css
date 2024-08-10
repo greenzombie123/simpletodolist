@@ -1,6 +1,5 @@
 aside{
     ul{
-        /*TODO Get some font files*/
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
