@@ -31,7 +31,8 @@ export default function App(toDoApp: ToDoApp): App {
     const onTaskListChanged = (taskList: ToDo[], project: string) => taskListView.render(taskList, project)
     const handleOpenAddTaskModal = () => addTaskModalView.open()
     const handleOpenAddProjectModal = () => addProjectModalView.open()
-    const handleGetProjectNamesOnModalOpen = () => model.getProjectNames()
+    const handleGetProjectNamesOnModalOpen = () => model.getProjectNames().filter(project => project !== "Today")
+
     const handleAddTask = (newToDo: NewToDo) => model.addTask(newToDo)
     const handleChangeCurrentTasks = (projectName: string) => model.setCurrentTasks(projectName)
     const handleEditTask = (id: string, todo: NewToDo) => { model.editTask(id, todo) }
@@ -42,9 +43,9 @@ export default function App(toDoApp: ToDoApp): App {
     }
     const handleDeleteTask = (id: string) => model.deleteTask(id)
     const handleAddProject = (projectName: string) => model.addProject(projectName)
-    const handleDeleteProject = (projectName: string) => { 
+    const handleDeleteProject = (projectName: string) => {
         model.moveToPreviousProject(projectName)
-        model.deleteProject(projectName) 
+        model.deleteProject(projectName)
         model.updateTasksForDeletedProject(projectName)
     }
     const handleOpenDeleteProjectModal = () => deleteProjectModalView.open()

@@ -108,7 +108,7 @@ const createAddTaskModal = (): AddTaskModalView => {
     const getInput = (): NewToDo => {
         const title = titleInput.value
         const description = descripText.value
-        const dueDate = new Date(dateInput.value)
+        const dueDate = dateInput.value
         const project = projectBox.getSelectedProjectName()
         const priority = priorityBox.getPriority()
         if (!description) return { title, dueDate, project, priority }

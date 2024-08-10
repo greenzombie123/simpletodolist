@@ -100,29 +100,27 @@ const createEditTaskModal = (): EditTaskModalView => {
 
     const bindEditTask = (handler: (id: string, todo: NewToDo) => void, id: string) => {
 
-        const editTask = () => {
+        editTaskButton.addEventListener('click', () => {
             const newToDo = getInput()
+            console.log(newToDo)
             handler(id, newToDo)
             close()
-        }
-
-        editTaskButton.addEventListener('click', () => {
-            editTask()
         }, { once: true })
     }
 
     const setInput = (todo: ToDo) => {
         titleInput.value = todo.title
         if (todo.description) descripText.value = todo.description
-        dateInput.value = todo.dueDate.toISOString().slice(0, 10)
+        dateInput.value = todo.dueDate
         priorityBox.setPriority(todo.priority)
+        projectBox.setSelectedProjectNameOnOpen(todo.project)
     }
 
 
     const getInput = (): NewToDo => {
         const title = titleInput.value
         const description = descripText.value
-        const dueDate = new Date(dateInput.value)
+        const dueDate = dateInput.value
         const project = projectBox.getSelectedProjectName()
         const priority = priorityBox.getPriority()
         if (!description) return { title, dueDate, project, priority }

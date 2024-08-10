@@ -6,7 +6,7 @@ uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 export interface ToDo {
     title: string,
     description?: string,
-    dueDate: Date,
+    dueDate: string,
     priority: Priority,
     project: string,
     id: string
@@ -17,7 +17,7 @@ export interface ToDo {
 export interface NewToDo {
     title: string,
     description?: string,
-    dueDate: Date,
+    dueDate: string,
     priority: Priority,
     project: string
 }
@@ -41,8 +41,8 @@ const taskSearcher: TaskSearcher = (() => {
     }
 
     const getTasksByToday = (tasks: ToDo[]) => {
-        const today = new Date().toDateString()
-        return tasks.filter(task => task.dueDate.toDateString() === today)
+        const today = new Date().toISOString().slice(0, 10)
+        return tasks.filter(task => task.dueDate === today)
     }
 
     const getTasksByInbox = (tasks: ToDo[]) => {
@@ -103,7 +103,7 @@ const taskManager: TaskManager = (() => {
 
     const setCurrentTasksByToday = () => {
         currentTasks = tasks.filter(task =>
-            task.dueDate.toDateString() === new Date().toDateString()
+            task.dueDate === new Date().toISOString().slice(0, 10)
         )
     }
 
@@ -286,11 +286,11 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
 
     const initialize = () => {
-        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes now", dueDate: new Date(), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: new Date("2025-12-11"), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("2024-02-27"), priority: Priority.High, project: "School" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: new Date("2024-05-02"), priority: Priority.Low, project: "Ice" })
+        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School" })
+        taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice" })
 
         setCurrentProject("Inbox")
         setCurrentTasks("Inbox")

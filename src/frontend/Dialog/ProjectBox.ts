@@ -2,6 +2,7 @@ export interface ProjectBox {
     setProjectNamesOnOpen: (projectNames: string[]) => void
     projectBox: HTMLDivElement
     getSelectedProjectName: () => string
+    setSelectedProjectNameOnOpen:(projectName:string)=> void
 }
 
 const createProjectBox = (): ProjectBox => {
@@ -28,9 +29,13 @@ const createProjectBox = (): ProjectBox => {
         })
     }
 
+    let setSelectedProjectNameOnOpen = (projectName:string)=>{
+        projectSelect.value = projectName
+    }
+
     const getSelectedProjectName = () => projectSelect.value
 
-    return { projectBox, setProjectNamesOnOpen, getSelectedProjectName }
+    return { projectBox, setProjectNamesOnOpen, getSelectedProjectName, setSelectedProjectNameOnOpen }
 }
 
 
