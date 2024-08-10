@@ -1,4 +1,5 @@
 import { NewToDo } from "../.."
+import dialogManager from "./Dialog"
 import createPriorityBox from "./PriorityBox"
 import createProjectBox from "./ProjectBox"
 
@@ -11,7 +12,7 @@ export interface AddTaskModalView {
 
 const createAddTaskModal = (): AddTaskModalView => {
 
-    const dialog = document.querySelector("dialog")!
+    const dialog = dialogManager.getDialog()
     const form = document.createElement('form')!
     let addTaskButton: HTMLButtonElement
     let cancelButton: HTMLButtonElement
@@ -78,13 +79,10 @@ const createAddTaskModal = (): AddTaskModalView => {
 
     const close = () => {
         clearInputs()
-        dialog.close()
+        dialogManager.closeDialog()
     }
 
     cancelButton.addEventListener('click', close)
-    dialog.addEventListener('click', (e: Event) => {
-        if (e.target === dialog) close()
-    })
 
     const clearInputs = () => {
         titleInput.value = ''

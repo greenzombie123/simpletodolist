@@ -1,3 +1,4 @@
+import dialogManager from "./Dialog"
 
 export interface AddProjectModalView {
     open: () => void
@@ -9,7 +10,7 @@ const createAddProjectModal = (): AddProjectModalView => {
 
     let currentProjects: string[] = []
 
-    const dialog = document.querySelector("dialog")!
+    const dialog = dialogManager.getDialog()
     const form = document.createElement('form')!
     let addProjectButton: HTMLButtonElement
     let cancelButton: HTMLButtonElement
@@ -55,13 +56,10 @@ const createAddProjectModal = (): AddProjectModalView => {
 
     const close = () => {
         clearInputs()
-        dialog.close()
+        dialogManager.closeDialog()
     }
 
     cancelButton.addEventListener('click', close)
-    dialog.addEventListener('click', (e: Event) => {
-        if (e.target === dialog) close()
-    })
 
     const clearInputs = () => {
         currentProjects = []
