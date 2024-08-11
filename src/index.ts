@@ -70,14 +70,13 @@ export interface ToDoApp {
     moveToPreviousProject: (currentProject: string) => void
 }
 
-const toDoApp: ToDoApp = ((ts: TaskSearcher) => {
+const toDoApp: ToDoApp = (() => {
 
     let tasks: ToDo[] = []
     let currentTasks: ToDo[] = []
     let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
     let currentProject: string
 
-    const taskSearcher: TaskSearcher = ts
 
     const addProject = (projectName: string) => {
         if (isProjectNameUnique(projectName)) projects = [...projects, projectName]
@@ -221,9 +220,6 @@ const toDoApp: ToDoApp = ((ts: TaskSearcher) => {
 
         setCurrentProject("Inbox")
         setCurrentTasks("Inbox")
-
-        // console.log(getCurrentProject())
-        // console.log(getCurrentTasks())
     }
 
     return {
@@ -233,7 +229,7 @@ const toDoApp: ToDoApp = ((ts: TaskSearcher) => {
         moveToPreviousProject
     }
 
-})(taskSearcher)
+})()
 
 const app = App(toDoApp)
 
