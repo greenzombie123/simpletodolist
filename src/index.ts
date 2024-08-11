@@ -191,6 +191,8 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
     let tasks: ToDo[] = []
     let currentTasks: ToDo[] = []
+    let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
+    let currentProject: string
 
     const taskManager: TaskManager = tm
     const projectManager: ProjectManager = pm
@@ -218,7 +220,6 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         taskManager.addTask(todo)
 
         setCurrentTasks(projectManager.getCurrentProject())
-
     }
 
     const editTask = (id: string, todo: NewToDo) => {
@@ -294,12 +295,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         taskManager.addTask({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School" })
         taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice" })
-        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox" })
+
 
         setCurrentProject("Inbox")
         setCurrentTasks("Inbox")
