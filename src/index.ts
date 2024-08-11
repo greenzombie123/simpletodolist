@@ -9,7 +9,8 @@ export interface ToDo {
     dueDate: string,
     priority: Priority,
     project: string,
-    id: string
+    id: string,
+    isCompleted: boolean
 }
 
 
@@ -18,7 +19,8 @@ export interface NewToDo {
     description?: string,
     dueDate: string,
     priority: Priority,
-    project: string
+    project: string,
+    isCompleted: boolean
 }
 
 export enum Priority {
@@ -117,7 +119,7 @@ const toDoApp: ToDoApp = (() => {
     }
 
     const updateTasksForDeletedProject = (projectName: string) => {
-        
+
         tasks = tasks.map(task => {
             if (task.project === projectName) return { ...task, project: "Inbox" }
             else return task
@@ -186,11 +188,11 @@ const toDoApp: ToDoApp = (() => {
 
 
     const initialize = () => {
-        tasks.push({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4() })
-        tasks.push({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4() })
-        tasks.push({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4() })
-        tasks.push({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4() })
-        tasks.push({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4() })
+        tasks.push({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4(), isCompleted: false })
 
 
         setCurrentProject("Inbox")
