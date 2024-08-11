@@ -52,123 +52,6 @@ const taskSearcher: TaskSearcher = (() => {
     return { getTasksByProject, getTasksByInbox, getTasksByToday }
 })()
 
-
-interface TaskManager {
-    tasks: ToDo[]
-    // currentTasks: ToDo[]
-    setCurrentTasks: (projectName: string) => void
-    getCurrentTasks: () => ToDo[]
-    addTask: (todo: NewToDo) => void
-    editTask: (id: string, todo: NewToDo) => void
-    deleteTask: (id: string) => void
-    getAllTasks: () => ToDo[]
-    updateTasksForDeletedProject: (projectName: string) => void
-}
-
-const taskManager: TaskManager = (() => {
-
-    let tasks: ToDo[] = []
-    let currentTasks: ToDo[] = []
-
-    const getCurrentTasks = () => currentTasks
-
-    const setCurrentTasks = (projectName: string) => {
-        if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
-        else currentTasks = tasks.filter(task => task.project === projectName)
-    }
-
-    const addTask = (todo: NewToDo) => {
-        const id = uuidv4()
-        tasks.push({ ...todo, id })
-    }
-
-    const editTask = (id: string, todo: NewToDo) => {
-        const newTasks: ToDo[] = tasks.map(task => {
-            if (id === task.id) return { ...todo, id }
-            else return task
-        })
-
-        tasks = [...newTasks]
-    }
-
-    const deleteTask = (id: string) => {
-        let newTasks: ToDo[] = []
-
-        tasks.forEach(task => {
-            if (id !== task.id) newTasks.push(task)
-        })
-
-        tasks = [...newTasks]
-    }
-
-    const setCurrentTasksByToday = () => {
-        currentTasks = tasks.filter(task =>
-            task.dueDate === new Date().toISOString().slice(0, 10)
-        )
-    }
-
-    const updateTasksForDeletedProject = (projectName: string) => {
-        tasks = tasks.map(task => {
-            if (task.project === projectName) return { ...task, project: "Inbox" }
-            else return task
-        })
-    }
-
-    const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
-
-    const getAllTasks = () => tasks
-
-    return { tasks, addTask, editTask, deleteTask, getAllTasks, getCurrentTasks, setCurrentTasks, updateTasksForDeletedProject }
-})()
-
-interface ProjectManager {
-    setCurrentProject: (project: string) => void
-    getCurrentProject: () => string
-    addProject: (name: string) => void
-    deleteProject: (name: string) => void
-    isProjectThere: (name: string) => boolean
-    getProjectNames: () => string[]
-}
-
-const projectManager: ProjectManager = (() => {
-
-    let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
-    let currentProject: string
-
-    const getCurrentProject = () => currentProject
-
-    const setCurrentProject = (project: string) => {
-        if (isProjectThere(project)) currentProject = project
-    }
-
-    const isProjectThere = (projectName: string) => {
-        return projects.some(project => project === projectName)
-    }
-
-    const isProjectNameUnique = (projectName: string) => {
-        return projects.some(project => project !== projectName)
-    }
-
-    const addProject = (projectName: string) => {
-        if (isProjectNameUnique(projectName)) projects = [...projects, projectName]
-    }
-
-    const deleteProject = (projectName: string) => {
-        if (projectName === "Inbox" || projectName === "Today") return
-        let newProjectList: string[] = []
-        projects.forEach(project => {
-            if (projectName !== project) newProjectList.push(project)
-        })
-
-        projects = [...newProjectList]
-    }
-
-    const getProjectNames = () => projects
-
-    return { addProject, deleteProject, getProjectNames, isProjectThere, getCurrentProject, setCurrentProject }
-})()
-
-
 export interface ToDoApp {
     addProject: (name: string) => void
     deleteProject: (name: string) => void
@@ -187,19 +70,17 @@ export interface ToDoApp {
     moveToPreviousProject: (currentProject: string) => void
 }
 
-const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher) => {
+const toDoApp: ToDoApp = ((ts: TaskSearcher) => {
 
     let tasks: ToDo[] = []
     let currentTasks: ToDo[] = []
     let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
     let currentProject: string
 
-    const taskManager: TaskManager = tm
-    const projectManager: ProjectManager = pm
     const taskSearcher: TaskSearcher = ts
 
-    const addProject = (name: string) => {
-        projectManager.addProject(name)
+    const addProject = (projectName: string) => {
+        if (isProjectNameUnique(projectName)) projects = [...projects, projectName]
 
         if (onProjectListChanged !== null) {
             const projectList = getProjectNames()
@@ -207,51 +88,73 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         }
     }
 
-    const deleteProject = (name: string) => {
-        projectManager.deleteProject(name)
+    const isProjectNameUnique = (projectName: string) => {
+        return projects.some(project => project !== projectName)
     }
 
-    const showProjectNames = () => {
-        const projects = projectManager.getProjectNames()
-        // console.log(projects)
+    const deleteProject = (projectName: string) => {
+        if (projectName === "Inbox" || projectName === "Today") return
+        let newProjectList: string[] = []
+        projects.forEach(project => {
+            if (projectName !== project) newProjectList.push(project)
+        })
+
+        projects = [...newProjectList]
     }
 
     const addTask = (todo: NewToDo) => {
-        taskManager.addTask(todo)
+        const id = uuidv4()
+        tasks.push({ ...todo, id })
 
-        setCurrentTasks(projectManager.getCurrentProject())
+        setCurrentTasks(getCurrentProject())
     }
 
     const editTask = (id: string, todo: NewToDo) => {
-        taskManager.editTask(id, todo)
 
-        setCurrentTasks(projectManager.getCurrentProject())
+        const newTasks: ToDo[] = tasks.map(task => {
+            if (id === task.id) return { ...todo, id }
+            else return task
+        })
+
+        tasks = [...newTasks]
+
+        setCurrentTasks(getCurrentProject())
     }
 
     const deleteTask = (id: string) => {
-        taskManager.deleteTask(id)
+        let newTasks: ToDo[] = []
 
-        setCurrentTasks(projectManager.getCurrentProject())
+        tasks.forEach(task => {
+            if (id !== task.id) newTasks.push(task)
+        })
+
+        tasks = [...newTasks]
+
+        setCurrentTasks(getCurrentProject())
     }
 
-    const getAllTasks = () => taskManager.getAllTasks()
+    const getAllTasks = () => tasks
 
-    const getProjectNames = () => projectManager.getProjectNames()
+    const getProjectNames = () => projects
 
     const getTasksByProject = (projectName: string) => {
         const tasks: ToDo[] = getAllTasks()
-        return taskSearcher.getTasksByProject(projectName, tasks)
+        return tasks.filter(task => task.project === projectName)
     }
 
     const updateTasksForDeletedProject = (projectName: string) => {
-        taskManager.updateTasksForDeletedProject(projectName)
-        if (onTaskListChanged) onTaskListChanged(getCurrentTasks(), getCurrentProject())
+        
+        tasks = tasks.map(task => {
+            if (task.project === projectName) return { ...task, project: "Inbox" }
+            else return task
+        })
+
+        if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
         if (onProjectListChanged) onProjectListChanged(getProjectNames())
     }
 
     const moveToPreviousProject = (currentProject: string) => {
-        //TODO change naming of this function
-        if (!isCurrentProjectBeingDeleted(currentProject)) return
+        if (!isNotCurrentProject(currentProject)) return
         const projects = getProjectNames()
         const index = projects.findIndex(project => project === currentProject)
         const previousProject = projects[index - 1]
@@ -259,21 +162,40 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         else setCurrentProject(previousProject)
     }
 
-    const isCurrentProjectBeingDeleted = (currentProject: string) => currentProject === getCurrentProject()
+    const isNotCurrentProject = (currentProject: string) => currentProject === getCurrentProject()
 
-    const getCurrentTasks = () => taskManager.getCurrentTasks()
-    const getCurrentProject = () => projectManager.getCurrentProject()
+    const getCurrentTasks = () => currentTasks
+
+    const getCurrentProject = () => currentProject
+
+    const isProjectThere = (projectName: string) => {
+        return projects.some(project => project === projectName)
+    }
+
     const setCurrentProject = (projectName: string) => {
-        projectManager.setCurrentProject(projectName)
+        if (isProjectThere(projectName)) currentProject = projectName
 
         if (onProjectListChanged !== null) {
             const projectList = getProjectNames()
             onProjectListChanged(projectList)
         }
     }
+
+    const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
+
+    const setCurrentTasksByToday = () => {
+        currentTasks = tasks.filter(task =>
+            task.dueDate === new Date().toISOString().slice(0, 10)
+        )
+    }
+
     const setCurrentTasks = (projectName: string) => {
-        projectManager.setCurrentProject(projectName)
-        taskManager.setCurrentTasks(projectName)
+
+        setCurrentProject(projectName)
+
+        if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday() //*DONE
+        else currentTasks = tasks.filter(task => task.project === projectName)
+
 
         if (onTaskListChanged !== null) {
             const taskList = getCurrentTasks()
@@ -290,11 +212,11 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
 
 
     const initialize = () => {
-        taskManager.addTask({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School" })
-        taskManager.addTask({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice" })
+        tasks.push({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4() })
+        tasks.push({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4() })
+        tasks.push({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4() })
+        tasks.push({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4() })
+        tasks.push({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4() })
 
 
         setCurrentProject("Inbox")
@@ -311,7 +233,7 @@ const toDoApp: ToDoApp = ((tm: TaskManager, pm: ProjectManager, ts: TaskSearcher
         moveToPreviousProject
     }
 
-})(taskManager, projectManager, taskSearcher)
+})(taskSearcher)
 
 const app = App(toDoApp)
 
