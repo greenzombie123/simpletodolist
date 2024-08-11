@@ -12,7 +12,6 @@ export interface ToDo {
     id: string
 }
 
-// Used for parameters when creating new tasks or editing a task. ID is added later.
 
 export interface NewToDo {
     title: string,
@@ -27,30 +26,6 @@ export enum Priority {
     Low,
     High
 }
-
-interface TaskSearcher {
-    getTasksByProject: (projectName: string, tasks: ToDo[]) => ToDo[]
-    getTasksByToday: (tasks: ToDo[]) => ToDo[]
-    getTasksByInbox: (tasks: ToDo[]) => ToDo[]
-}
-
-const taskSearcher: TaskSearcher = (() => {
-
-    const getTasksByProject = (projectName: string, tasks: ToDo[]) => {
-        return tasks.filter(task => task.project === projectName)
-    }
-
-    const getTasksByToday = (tasks: ToDo[]) => {
-        const today = new Date().toISOString().slice(0, 10)
-        return tasks.filter(task => task.dueDate === today)
-    }
-
-    const getTasksByInbox = (tasks: ToDo[]) => {
-        return tasks.filter(task => task.project === "inbox")
-    }
-
-    return { getTasksByProject, getTasksByInbox, getTasksByToday }
-})()
 
 export interface ToDoApp {
     addProject: (name: string) => void
@@ -235,5 +210,4 @@ const app = App(toDoApp)
 
 app.initialize()
 
-// toDoApp.initialize()
 
