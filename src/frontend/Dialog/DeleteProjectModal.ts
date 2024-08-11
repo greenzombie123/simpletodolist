@@ -42,6 +42,7 @@ const createDeleteProjectModal = (): DeleteProjectModalView => {
     const open = () => {
         if (getProjectNames === null) return
         currentProjects = getProjectNames()
+        while (projectSelect.childElementCount) { projectSelect.removeChild(projectSelect.firstChild!) }
         currentProjects.forEach(project => {
             if (project !== "Inbox" && project !== "Today") {
                 const option = document.createElement('option')!
