@@ -6,6 +6,7 @@ export interface TaskListView {
     render: (tasks: ToDo[], projectName: string) => void
     bindOpenEditTask: (handler: (todo: ToDo) => void) => void
     bindDeleteTask: (handler: (id: string) => void) => void
+    bindCompleteTask: (handler: (id: string) => void) => void
 }
 
 const createTaskListView = (): TaskListView => {
@@ -19,7 +20,8 @@ const createTaskListView = (): TaskListView => {
             createTaskView(
                 task,
                 () => { if (openEditTask) openEditTask(task) },
-                () => { if (deleteTask) deleteTask(task.id) })
+                () => { if (deleteTask) deleteTask(task.id) },
+                () => { if (completeTask) completeTask(task.id) })
         })
     }
 
@@ -31,7 +33,11 @@ const createTaskListView = (): TaskListView => {
 
     const bindDeleteTask = (handler: (id: string) => void) => { deleteTask = handler }
 
-    return { bindOpenEditTask, render, bindDeleteTask }
+    let completeTask: null | ((id: string) => void) = null
+
+    const bindCompleteTask = (handler: (id: string) => void) => { completeTask = handler }
+
+    return { bindOpenEditTask, render, bindDeleteTask, bindCompleteTask }
 }
 
 export default createTaskListView

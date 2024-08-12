@@ -39,7 +39,8 @@ export default function App(toDoApp: ToDoApp): App {
     const handleOpenEditTaskModal = (todo: ToDo) => {
         editTaskModalView.open()
         editTaskModalView.bindEditTask(handleEditTask, todo.id)
-        editTaskModalView.setInput(todo)
+        const currentToDo = model.getCurrentTask(todo.id)
+        editTaskModalView.setInput(currentToDo)
     }
     const handleDeleteTask = (id: string) => model.deleteTask(id)
     const handleAddProject = (projectName: string) => model.addProject(projectName)
@@ -49,6 +50,7 @@ export default function App(toDoApp: ToDoApp): App {
         model.updateTasksForDeletedProject(projectName)
     }
     const handleOpenDeleteProjectModal = () => deleteProjectModalView.open()
+    const handleCompleteTask = (id:string)=> model.toggleTaskCompletion(id)
 
 
 
@@ -67,6 +69,7 @@ export default function App(toDoApp: ToDoApp): App {
         projectListView.bindChangeCurrentTasks(handleChangeCurrentTasks)
         taskListView.bindOpenEditTask(handleOpenEditTaskModal)
         taskListView.bindDeleteTask(handleDeleteTask)
+        taskListView.bindCompleteTask(handleCompleteTask)
 
         model.initialize()
 

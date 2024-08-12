@@ -23,7 +23,7 @@ const createProjectBox = (): ProjectBox => {
         while (projectSelect.childElementCount) { projectSelect.removeChild(projectSelect.firstChild!) }
         projectNames.forEach(projectName => {
             const option = document.createElement('option')!
-            option.value = projectName
+            option.value = projectName 
             option.textContent = projectName
             projectSelect.appendChild(option)
         })

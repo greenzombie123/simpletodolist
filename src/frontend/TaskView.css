@@ -32,4 +32,13 @@
         width: 25px;
         height: 25px;
     }
+
+    svg {
+        position: absolute;
+        left: -55px;
+        top: 10px;
+        cursor: pointer;
+        width: 46px;
+        height: 46px;
+    }
 }

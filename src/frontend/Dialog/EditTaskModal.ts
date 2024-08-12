@@ -13,6 +13,8 @@ export interface EditTaskModalView {
 
 const createEditTaskModal = (): EditTaskModalView => {
 
+    let isCurrentTaskCompleted: boolean
+
     const dialog = dialogManager.getDialog()
     const form = document.createElement('form')!
     let editTaskButton: HTMLButtonElement
@@ -117,18 +119,21 @@ const createEditTaskModal = (): EditTaskModalView => {
         dateInput.value = todo.dueDate
         priorityBox.setPriority(todo.priority)
         projectBox.setSelectedProjectNameOnOpen(todo.project)
+        isCurrentTaskCompleted = todo.isCompleted
+        // console.log(isCurrentTaskCompleted, "setINput")
+        console.log(todo)
     }
 
 
     const getInput = (): NewToDo => {
         const title = titleInput.value
         const description = descripText.value
-        const dueDate = dateInput.value 
+        const dueDate = dateInput.value
         const project = projectBox.getSelectedProjectName()
         const priority = priorityBox.getPriority()
-        if (!description) return { title, dueDate, project, priority }
+        if (!description) return { title, dueDate, project, priority, isCompleted: isCurrentTaskCompleted }
 
-        return { title, description, dueDate, project, priority }
+        return { title, description, dueDate, project, priority, isCompleted: isCurrentTaskCompleted }
     }
 
     return { open, close, bindGetProjectNames, bindEditTask, setInput }

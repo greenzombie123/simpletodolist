@@ -45,6 +45,8 @@ export interface ToDoApp {
     bindOnProjectListChanged: (callBack: (projectList: string[]) => void) => void
     bindOnTaskListChanged: (callback: (taskList: ToDo[], project: string) => void) => void
     moveToPreviousProject: (currentProject: string) => void
+    toggleTaskCompletion: (id: string) => void
+    getCurrentTask:(id:string)=>ToDo
 }
 
 const toDoApp: ToDoApp = (() => {
@@ -165,8 +167,19 @@ const toDoApp: ToDoApp = (() => {
         )
     }
 
+    const toggleTaskCompletion = (id: string) => {
+        tasks = tasks.map(task => {
+            if (task.id === id) return { ...task, isCompleted: (task.isCompleted ? false : true) }
+            else return task
+        })
+        // if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
+    }
+
+    const getCurrentTask = (id: string) => tasks.find(task => task.id === id)!
+
     const setCurrentTasks = (projectName: string) => {
 
+        //! Look at implementation. There might be a bug!
         setCurrentProject(projectName)
 
         if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday() //*DONE
@@ -178,6 +191,8 @@ const toDoApp: ToDoApp = (() => {
             const project = getCurrentProject()
             onTaskListChanged(taskList, project)
         }
+
+        console.log(tasks)
     }
 
     let onProjectListChanged: null | ((projectList: string[]) => void) = null
@@ -203,7 +218,7 @@ const toDoApp: ToDoApp = (() => {
         addProject, deleteProject, initialize, getProjectNames, getCurrentProject, getCurrentTasks,
         editTask, addTask, deleteTask, getTasksByProject, setCurrentProject,
         setCurrentTasks, bindOnProjectListChanged, bindOnTaskListChanged, updateTasksForDeletedProject,
-        moveToPreviousProject
+        moveToPreviousProject, toggleTaskCompletion, getCurrentTask
     }
 
 })()
