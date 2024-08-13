@@ -64,8 +64,9 @@ dialog {
                 display: flex;
                 flex-direction: column;
 
-                .projectSelect {
+                #projectSelect {
                     color: black;
+                    font-size: 16px;
                 }
             }
 
@@ -111,19 +112,19 @@ dialog {
             }
         }
 
-        button{
+        button {
             padding: 5px 10px;
             font-size: 20px;
             width: 100px;
             margin-top: 30px;
         }
 
-        .addTaskButton{
+        .addTaskButton {
             grid-area: button1;
             place-self: end;
         }
 
-        .cancelButton{
+        .cancelButton {
             grid-area: button2;
             place-self: start;
         }
@@ -166,7 +167,17 @@ dialog {
             }
         }
 
-        .addProjectButton, .cancelButton {
+        #projectSelect {
+            grid-area: input;
+            padding: 2px;
+            width: 100%;
+            height: min-content;
+            font-size: inherit;
+        }
+
+        .deleteProjectButton,
+        .addProjectButton,
+        .cancelButton {
             padding: 5px;
             width: min-content;
             font-size: inherit;
@@ -179,6 +190,7 @@ dialog {
             grid-area: rightButton;
         }
 
+        .deleteProjectButton,
         .addProjectButton {
             grid-area: leftButton;
         }
