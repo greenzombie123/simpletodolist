@@ -67,7 +67,7 @@ const createAddProjectModal = (): AddProjectModalView => {
     }
 
     const doesProjectNameExist = (userInput: string) => {
-        if (getProjectNames === null) return
+        if (getProjectNames === null) return false
         return getProjectNames().some(projectName => projectName.toLowerCase() === userInput.toLowerCase())
     }
 

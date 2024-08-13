@@ -131,7 +131,7 @@ dialog {
 
     .projectModal {
         display: grid;
-        grid-template: 1fr 1fr 1fr / repeat(2, 1fr);
+        grid-template: 1fr 2fr 1fr / repeat(2, 1fr);
         grid-template-areas:
             "label label"
             "input input"
@@ -166,19 +166,21 @@ dialog {
             }
         }
 
-        button {
+        .addProjectButton, .cancelButton {
             padding: 5px;
             width: min-content;
             font-size: inherit;
             justify-self: center;
+            align-self: center;
+            margin: 0;
+        }
 
-            &.cancelButton {
-                grid-area: rightButton;
-            }
+        .cancelButton {
+            grid-area: rightButton;
+        }
 
-            &.addProjectButton {
-                grid-area: leftButton;
-            }
+        .addProjectButton {
+            grid-area: leftButton;
         }
     }
 

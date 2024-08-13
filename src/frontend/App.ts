@@ -32,7 +32,7 @@ export default function App(toDoApp: ToDoApp): App {
     const onTaskListChanged = (taskList: ToDo[], project: string) => taskListView.render(taskList, project)
     const handleOpenAddTaskModal = () => addTaskModalView.open()
     const handleOpenAddProjectModal = () => addProjectModalView.open()
-    const handleGetProjectNamesOnModalOpen = () => model.getProjectNames().filter(project => project !== "Today")
+    const handleGetProjectNamesOnModalOpen = () => model.getProjectNames()
 
     const handleAddTask = (newToDo: NewToDo) => model.addTask(newToDo)
     const handleChangeCurrentTasks = (projectName: string) => { 
