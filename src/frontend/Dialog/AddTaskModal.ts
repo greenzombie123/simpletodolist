@@ -1,4 +1,5 @@
-import { NewToDo } from "../.."
+
+import { NewToDo } from "../types"
 import dialogManager from "./Dialog"
 import createPriorityBox from "./PriorityBox"
 import createProjectBox from "./ProjectBox"

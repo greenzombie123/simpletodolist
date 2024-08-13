@@ -1,35 +1,7 @@
-import { NewToDo, ToDo, Priority } from './frontend/types';
+import { NewToDo, ToDo } from './frontend/types';
 import { v4 as uuidv4 } from 'uuid'
 import App from './frontend/App';
 import databaseManager from './frontend/database';
-uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-
-
-// export interface ToDo {
-//     title: string,
-//     description?: string,
-//     dueDate: string,
-//     priority: Priority,
-//     project: string,
-//     id: string,
-//     isCompleted: boolean
-// }
-
-
-// export interface NewToDo {
-//     title: string,
-//     description?: string,
-//     dueDate: string,
-//     priority: Priority,
-//     project: string,
-//     isCompleted: boolean
-// }
-
-// export enum Priority {
-//     None,
-//     Low,
-//     High
-// }
 
 export interface ToDoApp {
     addProject: (name: string) => void
@@ -71,6 +43,8 @@ const toDoApp: ToDoApp = (() => {
             const projectList = getProjectNames()
             onProjectListChanged(projectList)
         }
+
+        databaseManager.setProjects(projects)
     }
 
     const isProjectNameUnique = (projectName: string) => {
@@ -87,6 +61,8 @@ const toDoApp: ToDoApp = (() => {
         projects = [...newProjectList]
 
         if (onProjectListChanged) onProjectListChanged(getProjectNames())
+
+        databaseManager.setProjects(projects)
     }
 
     const addTask = (todo: NewToDo) => {

@@ -1,7 +1,6 @@
 import "./TaskView.css"
 import { Priority, ToDo } from "./types"
 
-
 const createTaskView = (
     toDo: ToDo,
     callBack: (todo: ToDo) => void,
