@@ -70,6 +70,8 @@ const toDoApp: ToDoApp = (() => {
         tasks.push({ ...todo, id })
 
         setCurrentTasks(getCurrentProject())
+
+        databaseManager.setTasks(tasks)
     }
 
     const editTask = (id: string, todo: NewToDo) => {
@@ -82,6 +84,8 @@ const toDoApp: ToDoApp = (() => {
         tasks = [...newTasks]
 
         setCurrentTasks(getCurrentProject())
+
+        databaseManager.setTasks(tasks)
     }
 
     const deleteTask = (id: string) => {
@@ -94,6 +98,8 @@ const toDoApp: ToDoApp = (() => {
         tasks = [...newTasks]
 
         setCurrentTasks(getCurrentProject())
+
+        databaseManager.setTasks(tasks)
     }
 
     const getAllTasks = () => tasks
@@ -111,6 +117,8 @@ const toDoApp: ToDoApp = (() => {
             if (task.project === projectName) return { ...task, project: "Inbox" }
             else return task
         })
+
+        databaseManager.setTasks(tasks)
     }
 
     const moveToPreviousProject = (currentProject: string) => {
@@ -154,6 +162,8 @@ const toDoApp: ToDoApp = (() => {
             if (task.id === id) return { ...task, isCompleted: (task.isCompleted ? false : true) }
             else return task
         })
+
+        databaseManager.setTasks(tasks)
     }
 
     const getCurrentTask = (id: string) => tasks.find(task => task.id === id)!
