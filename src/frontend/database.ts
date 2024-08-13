@@ -1,5 +1,5 @@
+import { ToDo, Priority } from './types';
 import { v4 as uuidv4 } from 'uuid'
-import { Priority, ToDo } from '..'
 
 const databaseManager = (() => {
     const taskKey = 'tasks'

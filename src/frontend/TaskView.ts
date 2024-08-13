@@ -1,5 +1,5 @@
-import { Priority, ToDo } from "..";
 import "./TaskView.css"
+import { Priority, ToDo } from "./types"
 
 
 const createTaskView = (

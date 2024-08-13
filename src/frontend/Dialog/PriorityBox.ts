@@ -1,4 +1,4 @@
-import { Priority } from "../.."
+import { Priority } from "../types"
 
 interface PriorityBox {
     priorityDiv: HTMLDivElement

@@ -1,4 +1,4 @@
-import { NewToDo, ToDo } from "../.."
+import { NewToDo, ToDo } from "../types"
 import dialogManager from "./Dialog"
 import createPriorityBox from "./PriorityBox"
 import createProjectBox from "./ProjectBox"
@@ -120,7 +120,6 @@ const createEditTaskModal = (): EditTaskModalView => {
         priorityBox.setPriority(todo.priority)
         projectBox.setSelectedProjectNameOnOpen(todo.project)
         isCurrentTaskCompleted = todo.isCompleted
-        // console.log(isCurrentTaskCompleted, "setINput")
         console.log(todo)
     }
 

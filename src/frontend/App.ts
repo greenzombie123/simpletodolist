@@ -1,4 +1,4 @@
-import { NewToDo, ToDo, ToDoApp } from ".."
+import { ToDo, NewToDo } from './types';
 import './App.css';
 import './Dialog/Dialog.css';
 import createAddTaskModal, { AddTaskModalView } from "./Dialog/AddTaskModal";
@@ -8,7 +8,7 @@ import createTaskListView, { TaskListView } from "./TaskListView";
 import createEditTaskModal, { EditTaskModalView } from "./Dialog/EditTaskModal";
 import createAddProjectModal, { AddProjectModalView } from "./Dialog/AddProjectModal";
 import createDeleteProjectModal, { DeleteProjectModalView } from "./Dialog/DeleteProjectModal";
-import { mode } from "../../webpack.config";
+import { ToDoApp } from '..';
 
 
 

@@ -1,33 +1,35 @@
+import { NewToDo, ToDo, Priority } from './frontend/types';
 import { v4 as uuidv4 } from 'uuid'
 import App from './frontend/App';
+import databaseManager from './frontend/database';
 uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
 
-export interface ToDo {
-    title: string,
-    description?: string,
-    dueDate: string,
-    priority: Priority,
-    project: string,
-    id: string,
-    isCompleted: boolean
-}
+// export interface ToDo {
+//     title: string,
+//     description?: string,
+//     dueDate: string,
+//     priority: Priority,
+//     project: string,
+//     id: string,
+//     isCompleted: boolean
+// }
 
 
-export interface NewToDo {
-    title: string,
-    description?: string,
-    dueDate: string,
-    priority: Priority,
-    project: string,
-    isCompleted: boolean
-}
+// export interface NewToDo {
+//     title: string,
+//     description?: string,
+//     dueDate: string,
+//     priority: Priority,
+//     project: string,
+//     isCompleted: boolean
+// }
 
-export enum Priority {
-    None,
-    Low,
-    High
-}
+// export enum Priority {
+//     None,
+//     Low,
+//     High
+// }
 
 export interface ToDoApp {
     addProject: (name: string) => void
@@ -51,9 +53,14 @@ export interface ToDoApp {
 
 const toDoApp: ToDoApp = (() => {
 
-    let tasks: ToDo[] = []
+    // let tasks: ToDo[] = []
+    // let currentTasks: ToDo[] = []
+    // let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
+    // let currentProject: string
+
+    let tasks: ToDo[] = databaseManager.getTasks()
     let currentTasks: ToDo[] = []
-    let projects: string[] = ['Inbox', 'Today', 'Ice', 'School']
+    let projects: string[] = databaseManager.getProjects()
     let currentProject: string
 
 
@@ -128,9 +135,6 @@ const toDoApp: ToDoApp = (() => {
             if (task.project === projectName) return { ...task, project: "Inbox" }
             else return task
         })
-
-        // if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
-        // if (onProjectListChanged) onProjectListChanged(getProjectNames())
     }
 
     const moveToPreviousProject = (currentProject: string) => {
@@ -159,11 +163,6 @@ const toDoApp: ToDoApp = (() => {
 
     const setCurrentProject = (projectName: string) => {
         if (isProjectThere(projectName)) currentProject = projectName
-
-        // if (onProjectListChanged !== null) {
-        //     const projectList = getProjectNames()
-        //     onProjectListChanged(projectList)
-        // }
     }
 
     const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
@@ -185,8 +184,6 @@ const toDoApp: ToDoApp = (() => {
 
     const setCurrentTasks = (projectName: string) => {
 
-        // setCurrentProject(projectName)
-
         if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
         else currentTasks = tasks.filter(task => task.project === projectName)
 
@@ -206,11 +203,11 @@ const toDoApp: ToDoApp = (() => {
 
 
     const initialize = () => {
-        tasks.push({ title: "Do the dishes", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Clean your room", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Buy some eggs", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Pay taxes", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Call mom", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4(), isCompleted: false })
+        // tasks.push({ title: "Do the dishes", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        // tasks.push({ title: "Clean your room", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        // tasks.push({ title: "Buy some eggs", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        // tasks.push({ title: "Pay taxes", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4(), isCompleted: false })
+        // tasks.push({ title: "Call mom", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4(), isCompleted: false })
 
 
         setCurrentProject("Inbox")

@@ -1,6 +1,6 @@
-import { ToDo } from '..'
 import createTaskView from './TaskView'
 import './TaskListView.css'
+import { ToDo } from './types'
 
 export interface TaskListView {
     render: (tasks: ToDo[], projectName: string) => void
