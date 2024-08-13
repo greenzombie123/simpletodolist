@@ -46,7 +46,7 @@ export interface ToDoApp {
     bindOnTaskListChanged: (callback: (taskList: ToDo[], project: string) => void) => void
     moveToPreviousProject: (currentProject: string) => void
     toggleTaskCompletion: (id: string) => void
-    getCurrentTask:(id:string)=>ToDo
+    getCurrentTask: (id: string) => ToDo
 }
 
 const toDoApp: ToDoApp = (() => {
@@ -78,6 +78,8 @@ const toDoApp: ToDoApp = (() => {
         })
 
         projects = [...newProjectList]
+
+        if (onProjectListChanged) onProjectListChanged(getProjectNames())
     }
 
     const addTask = (todo: NewToDo) => {
@@ -127,20 +129,25 @@ const toDoApp: ToDoApp = (() => {
             else return task
         })
 
-        if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
-        if (onProjectListChanged) onProjectListChanged(getProjectNames())
+        // if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
+        // if (onProjectListChanged) onProjectListChanged(getProjectNames())
     }
 
     const moveToPreviousProject = (currentProject: string) => {
-        if (!isNotCurrentProject(currentProject)) return
+        console.log(currentProject)
+        if (isProjectNotCurrentProject(currentProject)) return
         const projects = getProjectNames()
         const index = projects.findIndex(project => project === currentProject)
         const previousProject = projects[index - 1]
-        if (previousProject === "Today") setCurrentProject("Today")
-        else setCurrentProject(previousProject)
+        if (previousProject === "Today") {
+            setCurrentProject("Today")
+        }
+        else {
+            setCurrentProject(previousProject)
+        }
     }
 
-    const isNotCurrentProject = (currentProject: string) => currentProject === getCurrentProject()
+    const isProjectNotCurrentProject = (currentProject: string) => currentProject !== getCurrentProject()
 
     const getCurrentTasks = () => currentTasks
 
@@ -153,10 +160,10 @@ const toDoApp: ToDoApp = (() => {
     const setCurrentProject = (projectName: string) => {
         if (isProjectThere(projectName)) currentProject = projectName
 
-        if (onProjectListChanged !== null) {
-            const projectList = getProjectNames()
-            onProjectListChanged(projectList)
-        }
+        // if (onProjectListChanged !== null) {
+        //     const projectList = getProjectNames()
+        //     onProjectListChanged(projectList)
+        // }
     }
 
     const isNewCurrentProjectToday = (projectName: string) => projectName === "Today"
@@ -172,17 +179,15 @@ const toDoApp: ToDoApp = (() => {
             if (task.id === id) return { ...task, isCompleted: (task.isCompleted ? false : true) }
             else return task
         })
-        // if (onTaskListChanged) onTaskListChanged(getTasksByProject(getCurrentProject()), getCurrentProject())
     }
 
     const getCurrentTask = (id: string) => tasks.find(task => task.id === id)!
 
     const setCurrentTasks = (projectName: string) => {
 
-        //! Look at implementation. There might be a bug!
-        setCurrentProject(projectName)
+        // setCurrentProject(projectName)
 
-        if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday() //*DONE
+        if (isNewCurrentProjectToday(projectName)) setCurrentTasksByToday()
         else currentTasks = tasks.filter(task => task.project === projectName)
 
 
@@ -191,8 +196,6 @@ const toDoApp: ToDoApp = (() => {
             const project = getCurrentProject()
             onTaskListChanged(taskList, project)
         }
-
-        console.log(tasks)
     }
 
     let onProjectListChanged: null | ((projectList: string[]) => void) = null
@@ -203,14 +206,15 @@ const toDoApp: ToDoApp = (() => {
 
 
     const initialize = () => {
-        tasks.push({ title: "Do the dishes now", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Do the dishes", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Do the dishes yesterday", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Do the dishes today!", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4(), isCompleted: false })
-        tasks.push({ title: "Do the dishes today!", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Do the dishes", dueDate: "2024-08-10", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Clean your room", description: "Do it soon!", dueDate: new Date().toISOString().slice(0, 10), priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Buy some eggs", dueDate: "2025-12-11", priority: Priority.None, project: "Inbox", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Pay taxes", dueDate: "2024-02-27", priority: Priority.High, project: "School", id: uuidv4(), isCompleted: false })
+        tasks.push({ title: "Call mom", dueDate: "2024-05-02", priority: Priority.Low, project: "Ice", id: uuidv4(), isCompleted: false })
 
 
         setCurrentProject("Inbox")
+        if (onProjectListChanged) onProjectListChanged(getProjectNames())
         setCurrentTasks("Inbox")
     }
 

@@ -8,6 +8,7 @@ import createTaskListView, { TaskListView } from "./TaskListView";
 import createEditTaskModal, { EditTaskModalView } from "./Dialog/EditTaskModal";
 import createAddProjectModal, { AddProjectModalView } from "./Dialog/AddProjectModal";
 import createDeleteProjectModal, { DeleteProjectModalView } from "./Dialog/DeleteProjectModal";
+import { mode } from "../../webpack.config";
 
 
 
@@ -34,7 +35,10 @@ export default function App(toDoApp: ToDoApp): App {
     const handleGetProjectNamesOnModalOpen = () => model.getProjectNames().filter(project => project !== "Today")
 
     const handleAddTask = (newToDo: NewToDo) => model.addTask(newToDo)
-    const handleChangeCurrentTasks = (projectName: string) => model.setCurrentTasks(projectName)
+    const handleChangeCurrentTasks = (projectName: string) => { 
+        model.setCurrentProject(projectName)
+        model.setCurrentTasks(projectName) 
+    }
     const handleEditTask = (id: string, todo: NewToDo) => { model.editTask(id, todo) }
     const handleOpenEditTaskModal = (todo: ToDo) => {
         editTaskModalView.open()
@@ -46,11 +50,13 @@ export default function App(toDoApp: ToDoApp): App {
     const handleAddProject = (projectName: string) => model.addProject(projectName)
     const handleDeleteProject = (projectName: string) => {
         model.moveToPreviousProject(projectName)
-        model.deleteProject(projectName)
+        model.deleteProject(projectName) // Updates project list on the UI
         model.updateTasksForDeletedProject(projectName)
+        const currentProject = model.getCurrentProject()
+        model.setCurrentTasks(currentProject)
     }
     const handleOpenDeleteProjectModal = () => deleteProjectModalView.open()
-    const handleCompleteTask = (id:string)=> model.toggleTaskCompletion(id)
+    const handleCompleteTask = (id: string) => model.toggleTaskCompletion(id)
 
 
 
