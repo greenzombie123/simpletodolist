@@ -79,6 +79,14 @@ const createAddProjectModal = (): AddProjectModalView => {
         }, 2000)
     }
 
+    const showNoTextError = () => {
+        warningText.style.display = "block"
+        warningText.textContent = "Type a name to add a new project!"
+        setTimeout(() => {
+            warningText.style.display = "none"
+        }, 2000)
+    }
+
     let getProjectNames: null | (() => string[]) = null
 
     const bindGetProjectNames = (callBack: () => string[]) => getProjectNames = callBack
@@ -86,6 +94,10 @@ const createAddProjectModal = (): AddProjectModalView => {
     const bindAddProject = (handler: (project: string) => void) => {
         addProjectButton.addEventListener('click', () => {
             const projectName = getInput()
+            if (!projectName) {
+                showNoTextError()
+                return
+            }
             if (doesProjectNameExist(projectName)) {
                 showError()
                 return

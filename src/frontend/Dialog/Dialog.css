@@ -4,11 +4,12 @@ dialog {
 
     .modal {
         display: grid;
-        grid-template: auto auto auto / auto auto auto;
+        grid-template: repeat(4, auto)/ repeat(3, 1fr);
         grid-template-areas:
             "title title title"
             "descript descript descript"
             "date project priority"
+            "button1 . button2"
         ;
         row-gap: 10px;
         width: var(--modalWidth);
@@ -109,11 +110,28 @@ dialog {
                 background: url(../../assets/arrow-right-bold-outline.svg);
             }
         }
+
+        button{
+            padding: 5px 10px;
+            font-size: 20px;
+            width: 100px;
+            margin-top: 30px;
+        }
+
+        .addTaskButton{
+            grid-area: button1;
+            place-self: end;
+        }
+
+        .cancelButton{
+            grid-area: button2;
+            place-self: start;
+        }
     }
 
     .projectModal {
         display: grid;
-        grid-template: 1fr 2fr 1fr / repeat(2, 1fr);
+        grid-template: 1fr 1fr 1fr / repeat(2, 1fr);
         grid-template-areas:
             "label label"
             "input input"
